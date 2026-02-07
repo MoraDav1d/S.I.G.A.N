@@ -104,3 +104,95 @@ footer {
     text-align: center;
     border-top: 4px solid var(--dorado);
 }
+
+.login-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background-color: #f0f2f5; /* Un gris muy claro de fondo */
+}
+
+/* Tarjeta Blanca */
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.login-card h2 {
+    color: #1b4332; /* Tu verde oscuro */
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.login-card .subtitle {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+}
+
+/* Envoltura de Inputs con Icono */
+.input-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 15px 15px 15px 45px; /* Espacio extra a la izquierda para el icono */
+    border: 1.5px solid #2d6a4f; /* Borde verde medio */
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-wrapper input:focus {
+    border-color: #74c365; /* Verde más claro al hacer clic */
+    box-shadow: 0 0 8px rgba(116, 195, 101, 0.2);
+}
+
+/* Botón Estilo Moderno */
+.btn-entrar {
+    width: 100%;
+    padding: 15px;
+    background-color: #74c365; /* Verde vibrante de la imagen */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.btn-entrar:hover {
+    background-color: #5da64f;
+}
+
+.footer-text {
+    margin-top: 25px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.footer-text a {
+    color: #2d6a4f;
+    text-decoration: none;
+    font-weight: bold;
+}

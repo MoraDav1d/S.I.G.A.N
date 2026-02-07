@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SIGAN | Iniciar Sesión</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+
+    <div class="login-page-container">
+        <div class="login-card">
+            <h2>Acceso al Sistema</h2>
+            <p class="subtitle">Ingrese sus credenciales para gestionar su unidad de producción</p>
+
+            <form action="/auth/login" method="POST">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="email" name="correo" placeholder="Correo Electrónico" required>
+                </div>
+
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" name="password" placeholder="Contraseña" required>
+                </div>
+
+                <button type="submit" class="btn-entrar">Entrar al Sistema</button>
+            </form>
+
+            <p class="footer-text">¿Aún no tiene cuenta? <a href="/registro">Regístrese aquí</a></p>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

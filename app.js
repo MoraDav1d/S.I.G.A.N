@@ -25,3 +25,11 @@ app.get('/registro', (req, res) => {
 app.listen(PORT, () => {
     console.log(`✅ SIGAN ejecutándose en http://localhost:${PORT}`);
 });
+
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+app.get('/registro', (req, res) => {
+    res.render('registro');
+});
