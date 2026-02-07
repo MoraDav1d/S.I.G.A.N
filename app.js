@@ -1,7 +1,10 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+
+// Importamos las rutas y controladores
 const authRoutes = require('./src/routes/authRoutes');
+const mapController = require('./src/controllers/mapController');
 
 const app = express();
 const PORT = 3000;
@@ -10,36 +13,24 @@ const PORT = 3000;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/views'));
 
-// 2. Middlewares (Archivos estáticos y lectura de formularios)
+// 2. Middlewares
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// 3. RUTAS (Todas antes del listen)
-app.get('/', (req, res) => {
-    res.render('index');
-});
+// 3. RUTAS DE VISTAS
+app.get('/', (req, res) => res.render('index'));
+app.get('/login', (req, res) => res.render('login'));
+app.get('/registro', (req, res) => res.render('registro'));
+app.get('/registro-finca', (req, res) => res.render('registro_finca'));
 
-app.get('/login', (req, res) => {
-    res.render('login');
-});
+// RUTA DEL MAPA (Usando el controlador corregido)
+app.get('/mapa-nacional', mapController.getMapa);
 
-app.get('/registro', (req, res) => {
-    res.render('registro');
-});
-
+// 4. RUTAS DE LÓGICA
 app.use('/auth', authRoutes);
 
-app.get('/registro-finca', (req, res) => {
-    res.render('registro_finca'); 
-});
-
-// Esta es la ruta para la nueva interfaz del mapa
-app.get('/mapa-nacional', (req, res) => {
-    res.render('mapa'); // Crearemos este archivo ahora
-});
-
-// 4. Encendido del Servidor
+// 5. Encendido
 app.listen(PORT, () => {
-    console.log(`✅ SIGAN ejecutándose en http://localhost:${PORT}`);
+    console.log(`✅ SIGAN funcionando en http://localhost:${PORT}`);
 });
