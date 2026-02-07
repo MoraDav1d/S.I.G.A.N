@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SIGAN | Registro de Finca y Hierro</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+
+    <div class="finca-page-container">
+        <div class="finca-card">
+            <h2>Registro de Unidad de Producción</h2>
+            <p class="subtitle">Complete los datos legales de la finca y el propietario</p>
+
+            <form action="/auth/registrar-todo" method="POST" enctype="multipart/form-data">
+                
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-location-dot"></i> Datos de la Finca</h3>
+                    <div class="input-wrapper">
+                        <input type="text" name="nombre_finca" placeholder="Nombre de la Finca" required minlength="3">
+                    </div>
+                    <div class="input-wrapper">
+                        <input type="text" name="ubicacion" placeholder="Ubicación (Link Google Maps o Dirección)" required>
+                    </div>
+                    <div class="form-row">
+                        <select name="estado" required>
+                            <option value="">Seleccione Estado</option>
+                            <option value="Aragua">Aragua</option>
+                            <option value="Barinas">Barinas</option>
+                            <option value="Guarico">Guárico</option>
+                            <option value="Zulia">Zulia</option>
+                        </select>
+                        <input type="text" name="municipio" placeholder="Municipio" required>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-user-tie"></i> Datos del Propietario</h3>
+                    <div class="form-row">
+                        <input type="text" name="nombre_prop" placeholder="Nombre" required>
+                        <input type="text" name="apellido_prop" placeholder="Apellido" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="text" name="cedula" placeholder="Cédula (V-00.000.000)" required pattern="[V|E|J]-[0-9]{7,9}">
+                        <input type="tel" name="telefono" placeholder="Teléfono (04XX-0000000)" required>
+                    </div>
+                    <div class="input-wrapper">
+                        <input type="email" name="correo" placeholder="Correo Electrónico" required>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-stamp"></i> Identificador de Hierro</h3>
+                    <p class="info-text">Suba el diseño oficial del hierro para el marcaje del ganado.</p>
+                    <div class="file-input-wrapper">
+                        <input type="file" name="hierro" id="hierro-file" accept="image/*" required>
+                        <label for="hierro-file"><i class="fa-solid fa-upload"></i> Subir imagen del hierro</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-entrar">Finalizar Registro Nacional</button>
+            </form>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>
