@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const authRoutes = require('./src/routes/authRoutes');
 
 const app = express();
 const PORT = 3000;
@@ -25,6 +26,12 @@ app.get('/login', (req, res) => {
 
 app.get('/registro', (req, res) => {
     res.render('registro');
+});
+
+app.use('/auth', authRoutes);
+
+app.get('/registro-finca', (req, res) => {
+    res.render('registro_finca'); 
 });
 
 // Esta es la ruta para la nueva interfaz del mapa

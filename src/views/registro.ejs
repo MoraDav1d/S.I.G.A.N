@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGAN | Registro de Productor</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+
+    <div class="login-page-container">
+        <div class="login-card" style="max-width: 500px;"> 
+            <h2>Crear Cuenta</h2>
+            <p class="subtitle">Regístrese en el Sistema Integral de Gestión Agropecuaria</p>
+
+            <form action="/auth/register" method="POST">
+                
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" name="nombre" placeholder="Nombre" required>
+                    </div>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" name="apellido" placeholder="Apellido" required>
+                    </div>
+                </div>
+
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-id-card"></i>
+                    <input type="text" name="cedula" placeholder="Cédula (V-00.000.000)" required>
+                </div>
+
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-phone"></i>
+                    <input type="tel" name="telefono" placeholder="Teléfono" required>
+                </div>
+
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" name="correo" placeholder="Correo Electrónico" required>
+                </div>
+
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" name="password" placeholder="Cree una contraseña" required>
+                </div>
+
+                <button type="submit" class="btn-entrar">Crear Mi Cuenta</button>
+            </form>
+
+            <p class="footer-text">
+                ¿Ya tiene una cuenta activa? <a href="/login">Inicie Sesión aquí</a>
+            </p>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>
