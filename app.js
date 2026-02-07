@@ -5,25 +5,18 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = 3000;
 
-// Configuración de EJS
+// 1. Configuración de EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/views'));
 
-// Archivos estáticos
+// 2. Middlewares (Archivos estáticos y lectura de formularios)
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-// Rutas
+// 3. RUTAS (Todas antes del listen)
 app.get('/', (req, res) => {
     res.render('index');
-});
-
-app.get('/registro', (req, res) => {
-    res.render('registro');
-});
-
-app.listen(PORT, () => {
-    console.log(`✅ SIGAN ejecutándose en http://localhost:${PORT}`);
 });
 
 app.get('/login', (req, res) => {
@@ -32,4 +25,14 @@ app.get('/login', (req, res) => {
 
 app.get('/registro', (req, res) => {
     res.render('registro');
+});
+
+// Esta es la ruta para la nueva interfaz del mapa
+app.get('/mapa-nacional', (req, res) => {
+    res.render('mapa'); // Crearemos este archivo ahora
+});
+
+// 4. Encendido del Servidor
+app.listen(PORT, () => {
+    console.log(`✅ SIGAN ejecutándose en http://localhost:${PORT}`);
 });

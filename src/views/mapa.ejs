@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SIGAN | Mapa Nacional</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+
+    <div class="main-wrapper">
+        <div class="tabs-header">
+            <div class="tab-item">
+                <span>🐎</span> Hierros y Señales
+            </div>
+            <div class="tab-item">
+                <span>📋</span> Requisitos
+            </div>
+            <div class="tab-item active">
+                <span>📍</span> Números identificadores
+            </div>
+        </div>
+
+        <div class="map-container-box">
+            <div class="image-area">
+                <img src="/img/mapa.jpg" alt="Mapa Identificadores de Venezuela">
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>
