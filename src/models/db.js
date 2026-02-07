@@ -41,6 +41,33 @@ db.serialize(() => {
         id_productor INTEGER,
         FOREIGN KEY (id_productor) REFERENCES productores(id_productor)
     )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS ganado (
+        id_animal INTEGER PRIMARY KEY AUTOINCREMENT,
+        codigo_arete TEXT UNIQUE, 
+        nombre_animal TEXT,
+        raza TEXT,
+        sexo TEXT,
+        fecha_nacimiento DATE,
+        peso_inicial REAL,
+        proposito TEXT,
+        id_finca INTEGER,
+        FOREIGN KEY (id_finca) REFERENCES fincas(id_finca)
+    )`, (err) => {
+        if (err) {
+            console.error("Error al crear la tabla ganado:", err.message);
+        } else {
+            console.log("✅ Tabla 'ganado' verificada/creada correctamente.");
+        }
+    });
+});
+
+db.run(`ALTER TABLE ganado ADD COLUMN proposito TEXT`, (err) => {
+    if (err) {
+        console.log("La columna 'proposito' ya existe o no se pudo agregar.");
+    } else {
+        console.log("✅ Columna 'proposito' agregada con éxito.");
+    }
 });
 
 module.exports = db;

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SIGAN | Registrar Animal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+
+    <div class="finca-page-container">
+        <div class="finca-card">
+            <header class="form-section">
+                <h2><i class="fa-solid fa-cow"></i> Registro de Bovino</h2>
+                <p class="info-text">Ingrese los datos técnicos del ejemplar para el inventario nacional.</p>
+            </header>
+
+            <form action="/auth/registrar-ganado" method="POST">
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-tag"></i> Identificación</h3>
+                    <div class="form-row">
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-hashtag"></i>
+                            <input type="text" name="codigo_arete" placeholder="Número de Arete o ID" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-signature"></i>
+                            <input type="text" name="nombre_animal" placeholder="Nombre (Opcional)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-dna"></i> Datos Biológicos</h3>
+                    <div class="form-row">
+                        <select name="raza" required class="input-wrapper" style="padding: 10px; border-radius: 10px; border: 1.5px solid #2d6a4f;">
+                            <option value="" disabled selected>Seleccione la Raza</option>
+                            <option value="Brahman">Brahman</option>
+                            <option value="Carora">Carora</option>
+                            <option value="Holstein">Holstein</option>
+                            <option value="Jersey">Jersey</option>
+                            <option value="Guzerat">Guzerat</option>
+                            <option value="Mestizo">Mestizo</option>
+                        </select>
+                        
+                        <select name="sexo" required class="input-wrapper" style="padding: 10px; border-radius: 10px; border: 1.5px solid #2d6a4f;">
+                            <option value="" disabled selected>Sexo</option>
+                            <option value="Macho">Macho (Toro/Novillo)</option>
+                            <option value="Hembra">Hembra (Vaca/Novilla)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-wrapper">
+                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 5px;">Fecha de Nacimiento</p>
+                            <input type="date" name="fecha_nacimiento" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <p style="font-size: 0.8rem; color: #666; margin-bottom: 5px;">Peso Inicial (Kg)</p>
+                            <input type="number" name="peso_inicial" step="0.01" placeholder="Ej: 350.50">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-sthetoscope"></i> Propósito Productivo</h3>
+                    <div class="form-row">
+                        <select name="proposito" required class="input-wrapper" style="padding: 10px; border-radius: 10px; border: 1.5px solid #2d6a4f; width: 100%;">
+                            <option value="Carne">Producción de Carne</option>
+                            <option value="Leche">Producción de Leche</option>
+                            <option value="Doble">Doble Propósito</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-entrar">
+                    <i class="fa-solid fa-save"></i> Guardar en Inventario
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

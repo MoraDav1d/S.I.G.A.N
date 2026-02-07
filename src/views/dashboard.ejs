@@ -24,7 +24,14 @@
                     <div class="finca-details">
                         <p><strong><i class="fa-solid fa-location-dot"></i> Ubicación:</strong> <%= finca.municipio %>, <%= finca.estado %></p>
                         <p><strong><i class="fa-solid fa-id-badge"></i> Propietario:</strong> <%= finca.nombre_prop %> <%= finca.apellido_prop %></p>
-                        <p><strong><i class="fa-solid fa-envelope"></i> Contacto:</strong> <%= finca.correo_prop %></p>
+                    </div>
+
+                    <div style="background: var(--verde-claro); color: white; padding: 15px; border-radius: 10px; margin-top: 15px; display: flex; align-items: center; gap: 15px;">
+                        <i class="fa-solid fa-cow" style="font-size: 2rem;"></i>
+                        <div>
+                            <h4 style="margin: 0;">Inventario Actual</h4>
+                            <p style="margin: 0; font-size: 1.2rem; font-weight: bold;"><%= totalAnimales %> Ejemplares</p>
+                        </div>
                     </div>
 
                     <div class="hierro-preview">
@@ -43,11 +50,62 @@
             <div class="dash-card shortcuts">
                 <h3><i class="fa-solid fa-bolt"></i> Acciones Rápidas</h3>
                 <div class="btn-group">
-                    <button class="btn-dash"><i class="fa-solid fa-plus"></i> Registrar Ganado</button>
+                    <a href="/registrar-ganado" class="btn-dash" style="text-decoration: none; display: block; width: 100%;">
+                        <i class="fa-solid fa-plus"></i> Registrar Ganado
+                    </a>
                     <button class="btn-dash"><i class="fa-solid fa-list-check"></i> Ver Inventario</button>
                     <button class="btn-dash"><i class="fa-solid fa-file-pdf"></i> Reporte SIGA</button>
                 </div>
             </div>
+        </div>
+
+        <div class="dash-card" style="margin-top: 20px; width: 100%; overflow-x: auto;">
+            <h3><i class="fa-solid fa-list"></i> Inventario de Ganado</h3>
+            
+            <% if (animales.length > 0) { %>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <thead>
+                        <tr style="background-color: #2d6a4f; color: white; text-align: left;">
+                            <th style="padding: 10px;">ID / Arete</th>
+                            <th style="padding: 10px;">Nombre</th>
+                            <th style="padding: 10px;">Raza</th>
+                            <th style="padding: 10px;">Sexo</th>
+                            <th style="padding: 10px;">Uso / Propósito</th>
+                            <th style="padding: 10px;">Peso (Kg)</th>
+                            <th style="padding: 10px;">Fecha Nac.</th>
+                            <th style="padding: 10px; text-align: center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% animales.forEach(animal => { %>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 10px;"><strong><%= animal.codigo_arete %></strong></td>
+                                <td style="padding: 10px;"><%= animal.nombre_animal || 'N/A' %></td>
+                                <td style="padding: 10px;"><%= animal.raza %></td>
+                                <td style="padding: 10px;"><%= animal.sexo %></td>
+                                <td style="padding: 10px;">
+                                    <span style="background: #e9f5ee; color: #2d6a4f; padding: 4px 8px; border-radius: 5px; font-size: 0.8rem;">     
+                                        <%= animal.proposito || 'No asignado' %>
+                                    </span>
+                                </td>
+                                <td style="padding: 10px;"><%= animal.peso_inicial %> Kg</td>
+                                <td style="padding: 10px;"><%= animal.fecha_nacimiento %></td>
+                                <td style="padding: 10px; text-align: center;">
+                                    <form action="/auth/eliminar-animal/<%= animal.id_animal %>" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este ejemplar del sistema nacional?');">
+                                        <button type="submit" style="background: #e63946; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p style="text-align: center; color: #666; padding: 20px;">
+                    No hay animales registrados aún. ¡Usa el botón "Registrar Ganado" para comenzar!
+                </p>
+            <% } %>
         </div>
     </div>
 
