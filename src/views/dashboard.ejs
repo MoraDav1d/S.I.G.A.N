@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGAN | Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+
+    <div class="dashboard-container">
+        <header class="dash-header">
+            <h1>Bienvenido, <%= usuario %> 👋</h1>
+            <p>Panel de Gestión de la Unidad de Producción</p>
+        </header>
+
+        <div class="dash-grid">
+            <div class="dash-card main-info">
+                <% if (finca) { %>
+                    <h3><i class="fa-solid fa-tractor"></i> <%= finca.nombre_finca %></h3>
+                    
+                    <div class="finca-details">
+                        <p><strong><i class="fa-solid fa-location-dot"></i> Ubicación:</strong> <%= finca.municipio %>, <%= finca.estado %></p>
+                        <p><strong><i class="fa-solid fa-id-badge"></i> Propietario:</strong> <%= finca.nombre_prop %> <%= finca.apellido_prop %></p>
+                        <p><strong><i class="fa-solid fa-envelope"></i> Contacto:</strong> <%= finca.correo_prop %></p>
+                    </div>
+
+                    <div class="hierro-preview">
+                        <p><i class="fa-solid fa-stamp"></i> Hierro Registrado</p>
+                        <img src="/uploads/<%= finca.hierro_img %>" alt="Hierro de la finca">
+                    </div>
+                <% } else { %>
+                    <div class="no-data">
+                        <h3>Bienvenido al Sistema</h3>
+                        <p>Aún no has completado el registro legal de tu unidad de producción.</p>
+                        <a href="/registro-finca" class="btn-entrar-dash">Registrar Finca Ahora</a>
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="dash-card shortcuts">
+                <h3><i class="fa-solid fa-bolt"></i> Acciones Rápidas</h3>
+                <div class="btn-group">
+                    <button class="btn-dash"><i class="fa-solid fa-plus"></i> Registrar Ganado</button>
+                    <button class="btn-dash"><i class="fa-solid fa-list-check"></i> Ver Inventario</button>
+                    <button class="btn-dash"><i class="fa-solid fa-file-pdf"></i> Reporte SIGA</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

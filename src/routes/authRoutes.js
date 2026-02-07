@@ -7,4 +7,6 @@ router.post('/login', authController.login);
 
 router.post('/registrar-todo', authController.upload, authController.registrarTodo);
 
+router.get('/logout', authController.logout);
+
 module.exports = router;

@@ -30,7 +30,12 @@ exports.login = (req, res) => {
         if (err || !user || user.password !== password) {
             return res.send("Correo o contraseña incorrectos.");
         }
-        res.redirect('/registro-finca');
+        
+        // --- GUARDAR EN SESIÓN ---
+        req.session.userId = user.id_productor;
+        req.session.userName = user.nombre; // El nombre del sobrino (quien usa la app)
+        
+        res.redirect('/dashboard');
     });
 };
 
@@ -41,4 +46,13 @@ exports.registrarTodo = (req, res) => {
     
     // Por ahora, solo confirmamos que llegó
     res.send("<h1>¡Registro Exitoso!</h1><p>La finca y el hierro han sido guardados en el sistema nacional.</p><a href='/'>Volver al inicio</a>");
+};
+
+exports.logout = (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.log("Error al cerrar sesión:", err);
+        }
+        res.redirect('/login'); // Al cerrar, lo mandamos de vuelta al login
+    });
 };
