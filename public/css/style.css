@@ -1,0 +1,106 @@
+/* Paleta de Colores Institucional */
+:root {
+    --verde-oscuro: #1b4332;
+    --verde-medio: #2d6a4f;
+    --verde-claro: #40916c;
+    --dorado: #b79407;
+    --blanco: #ffffff;
+    --gris-fondo: #f4f7f6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--gris-fondo);
+    color: #333;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--verde-oscuro);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--dorado);
+}
+
+.btn-login {
+    border: 1px solid var(--dorado);
+    padding: 8px 15px;
+    border-radius: 4px;
+}
+
+/* Hero Section */
+.hero {
+    height: 70vh;
+    background: linear-gradient(rgba(27, 67, 50, 0.8), rgba(27, 67, 50, 0.8)), 
+                url('https://images.unsplash.com/photo-1544919982-b61976f0ba43?auto=format&fit=crop&w=1200&q=80');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 0 10%;
+}
+
+.hero h1 { font-size: 3.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 2px; }
+.hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; }
+
+.hero button {
+    background-color: var(--dorado);
+    color: white;
+    padding: 15px 40px;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.hero button:hover { background-color: #d4ac0d; transform: translateY(-3px); }
+
+/* Secciones de Información */
+.info-section {
+    padding: 80px 15%;
+    text-align: center;
+    background: white;
+}
+
+.info-section h2 { color: var(--verde-oscuro); font-size: 2.5rem; margin-bottom: 20px; }
+
+/* Footer */
+footer {
+    background-color: #1a1a1a;
+    color: #999;
+    padding: 40px 5%;
+    text-align: center;
+    border-top: 4px solid var(--dorado);
+}
