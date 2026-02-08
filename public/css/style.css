@@ -115,46 +115,200 @@ main {
 }
 
 /* Hero Section */
+/* --- HERO SECTION REPOTENCIADO --- */
 .hero {
-    height: 70vh;
-    background: linear-gradient(rgba(27, 67, 50, 0.8), rgba(27, 67, 50, 0.8)), 
-                url('/img/portada.jpg');
+    /* Usamos calc(100vh - 89px) para restar el alto exacto de tu Navbar 
+       (65px de logo + 10px arriba + 10px abajo + 4px de borde).
+    */
+    min-height: calc(100vh - 89px); 
+    
+    background: linear-gradient(rgba(27, 67, 50, 0.4), rgba(27, 67, 50, 0.7)), 
+                url('/img/hero-foto.jpg');
     background-size: cover;
     background-position: center;
+    background-attachment: fixed; 
+    
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     color: white;
     padding: 0 10%;
+    margin: 0;
+    
+    /* Asegura que no haya scroll innecesario */
+    overflow: hidden; 
 }
 
-.hero h1 { font-size: 3.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 2px; }
-.hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; }
+.hero h1 { 
+    font-size: 4.5rem; /* El tamaño masivo que te gustó */
+    margin-bottom: 1.5rem; 
+    text-transform: uppercase; 
+    letter-spacing: -1px; 
+    line-height: 1.1;
+    font-weight: 800;
+    text-shadow: 2px 4px 15px rgba(0,0,0,0.6);
+    max-width: 800px; /* Para que no se extienda demasiado en pantallas grandes */
+}
 
-.hero button {
-    background-color: var(--dorado);
+.hero p { 
+    font-size: 1.6rem; 
+    margin-bottom: 3rem; 
+    max-width: 700px; 
+    font-weight: 300;
+    text-shadow: 1px 2px 10px rgba(0,0,0,0.6);
+}
+
+/* Botón adaptado a tu estilo de login pero en grande */
+.btn-main, .hero button {
+    background-color: #74c365; 
     color: white;
-    padding: 15px 40px;
-    border: none;
-    font-size: 1.1rem;
+    padding: 22px 55px; 
+    border: 2px solid white; 
+    font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
-    border-radius: 5px;
-    transition: 0.3s;
+    border-radius: 50px; 
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-.hero button:hover { background-color: #d4ac0d; transform: translateY(-3px); }
-
-/* Secciones de Información */
-.info-section {
-    padding: 80px 15%;
-    text-align: center;
-    background: white;
+.btn-main:hover, .hero button:hover { 
+    background-color: var(--verde-oscuro); 
+    color: white;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
 }
 
-.info-section h2 { color: var(--verde-oscuro); font-size: 2.5rem; margin-bottom: 20px; }
+/* --- SECCIÓN SOBRE NOSOTROS --- */
+.about-section {
+    min-height: 80vh; /* Ocupa toda la pantalla */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 10%;
+    background-color: var(--blanco);
+}
+
+.about-flex {
+    display: flex;
+    align-items: center;
+    gap: 80px; /* Más espacio entre imagen y texto */
+    max-width: 1400px; /* Un poco más ancho para pantallas grandes */
+    margin: 0 auto;
+}
+
+.about-image {
+    flex: 1.2; /* La imagen ahora tiene un poco más de peso visual */
+    position: relative;
+}
+
+.about-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 30px; /* Bordes más curvos y modernos */
+    box-shadow: 25px 25px 0px var(--verde-medio); /* Sombra sólida más grande */
+    transition: transform 0.5s ease;
+}
+
+.about-image img:hover {
+    transform: scale(1.02);
+}
+
+.about-text {
+    flex: 1;
+}
+
+.about-text h2 {
+    font-size: 3.5rem; /* Texto más grande e imponente */
+    color: var(--verde-oscuro);
+    margin-bottom: 25px;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.about-text p {
+    font-size: 1.3rem; /* Párrafos más legibles */
+    line-height: 1.7;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.badge {
+    background-color: #e8f5e9;
+    color: var(--verde-oscuro);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+/* --- SECCIÓN MISIÓN Y VISIÓN --- */
+/* --- SECCIÓN MISIÓN Y VISIÓN (ESTILO PROFESIONAL SIN CAJAS) --- */
+.mission-vision-section {
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    padding: 60px 10% 150px 10%;
+    background-color: var(--blanco); /* Fondo limpio */
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px; /* Aumentamos el espacio para que respire mejor */
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.mv-item {
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+/* Iconos elegantes */
+.mv-icon {
+    font-size: 3rem;
+    color: var(--verde-medio);
+    margin-bottom: 25px;
+    display: block;
+}
+
+.mv-item h3 {
+    color: var(--verde-oscuro);
+    font-size: 2rem; /* Más grande e imponente */
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+/* El detalle dorado ahora es una línea minimalista debajo del título */
+.mv-item h3::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 5px;
+    background-color: var(--dorado);
+    margin-top: 10px;
+    border-radius: 2px;
+}
+
+.mv-item p {
+    color: #555; /* Un gris un poco más oscuro para mejor lectura */
+    line-height: 1.8;
+    font-size: 1.40rem;
+}
+
+/* Efecto hover suave (sin mover cajas, solo un leve desplazamiento) */
+.mv-item:hover {
+    transform: translateY(-5px);
+}
 
 /* Footer */
 footer {

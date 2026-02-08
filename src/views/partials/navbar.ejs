@@ -12,14 +12,14 @@
         <li><a href="/mapa-nacional">Mapa Nacional</a></li>
 
         <% if (locals.usuario) { %>
-            <li><a href="/dashboard">Panel</a></li>
+            <li><a href="/dashboard">Gestión</a></li>
             <li>
                 <a href="/auth/logout" class="logout-link">
                     <i class="fa-solid fa-right-from-bracket"></i> Salir
                 </a>
             </li>
         <% } else { %>
-            <li><a href="/login" class="btn-login">Registrar mi Finca</a></li>
+            <li><a href="/login" class="btn-login">Iniciar Sesión</a></li>
         <% } %>
     </ul>
 

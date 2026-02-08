@@ -145,25 +145,60 @@ app.get('/reporte-sigan', isAuthenticated, (req, res) => {
         doc.fillColor('black').fontSize(11).text(`Finca: ${finca.nombre_finca}`, 60, 160);
         doc.text(`Propietario: ${finca.nombre_prop} ${finca.apellido_prop}`, 300, 160);
 
+        // --- ENCABEZADO DE TABLA RECONFIGURADO ---
+        // --- ENCABEZADO DE TABLA RECONFIGURADO (Incluye Peso) ---
         const tableTop = 220;
         doc.rect(50, tableTop, 500, 25).fill('#1b4332');
-        doc.fillColor('white').fontSize(10).text('Arete', 60, tableTop + 8);
-        doc.text('Nombre / Propósito', 130, tableTop + 8);
-        doc.text('Raza', 260, tableTop + 8);
-        doc.text('Sexo', 350, tableTop + 8);
-        doc.text('F. Nacimiento', 440, tableTop + 8);
+        doc.fillColor('white').fontSize(9) // Bajamos a 9 para que quepan más títulos
+           .text('Arete', 55, tableTop + 8)
+           .text('Animal / Uso', 110, tableTop + 8)
+           .text('Raza', 215, tableTop + 8)
+           .text('Peso', 290, tableTop + 8) // Columna de Peso
+           .text('Sexo', 340, tableTop + 8)
+           .text('F. Nac', 395, tableTop + 8)
+           .text('Origen', 475, tableTop + 8);
 
         let currentY = tableTop + 25;
         if (rows[0].id_animal) {
             rows.forEach((animal, index) => {
-                doc.fillColor('black').fontSize(9);
-                if (index % 2 !== 0) doc.rect(50, currentY, 500, 30).fill('#f9f9f9');
-                doc.fillColor('black').text(animal.codigo_arete, 60, currentY + 10);
-                doc.text(animal.nombre_animal || 'N/A', 130, currentY + 10);
-                doc.text(animal.raza, 260, currentY + 10);
-                doc.text(animal.sexo, 350, currentY + 10);
-                doc.text(animal.fecha_nacimiento || 'S/D', 440, currentY + 10);
-                currentY += 30;
+                doc.fillColor('black').fontSize(8.5);
+                
+                if (index % 2 !== 0) doc.rect(50, currentY, 500, 35).fill('#f9f9f9');
+                
+                doc.fillColor('black');
+                
+                // 1. Arete
+                doc.text(animal.codigo_arete, 55, currentY + 12);
+                
+                // 2. Nombre y Propósito (Multilínea)
+                doc.font('Helvetica-Bold').text(animal.nombre_animal || 'S/N', 110, currentY + 8);
+                doc.font('Helvetica').fontSize(7.5).fillColor('#40916c').text(`${animal.proposito || 'N/A'}`, 110, currentY + 18);
+                
+                // 3. Raza
+                doc.fillColor('black').fontSize(8.5).text(animal.raza, 215, currentY + 12);
+                
+                // 4. Peso (Con unidad de medida)
+                const pesoText = animal.peso_inicial ? `${animal.peso_inicial} Kg` : 'S/P';
+                doc.text(pesoText, 290, currentY + 12);
+                
+                // 5. Sexo
+                doc.text(animal.sexo, 340, currentY + 12);
+                
+                // 6. Fecha Nacimiento
+                doc.text(animal.fecha_nacimiento || 'S/D', 395, currentY + 12);
+                
+                // 7. Origen (Estado)
+                const nombreEstado = estadosVzla[animal.codigo_estado] || 'N/A';
+                doc.text(nombreEstado, 475, currentY + 12);
+                
+                currentY += 35;
+
+                // Control de salto de página (Opcional pero recomendado)
+                if (currentY > 700) { 
+                    doc.addPage();
+                    currentY = 50; 
+                    // Aquí podrías repetir el encabezado si quieres
+                }
             });
         }
         doc.end();

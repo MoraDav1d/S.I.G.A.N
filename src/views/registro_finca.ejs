@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIGAN | Registro de Finca y Hierro</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -17,22 +18,44 @@
             <form action="/auth/registrar-todo" method="POST" enctype="multipart/form-data">
                 
                 <div class="form-section">
-                    <h3><i class="fa-solid fa-location-dot"></i> Datos de la Finca</h3>
+                    <h3><i class="fa-solid fa-tractor"></i> Datos de la Finca</h3>
+                    
                     <div class="input-wrapper">
-                        <input type="text" name="nombre_finca" placeholder="Nombre de la Finca" required minlength="3">
+                        <label>Nombre de la Unidad de Producción</label>
+                        <input type="text" name="nombre_finca" placeholder="Ej: Hacienda La Esperanza" required minlength="3">
                     </div>
+
                     <div class="input-wrapper">
-                        <input type="text" name="ubicacion" placeholder="Ubicación (Link Google Maps o Dirección)" required>
+                        <label>Dirección Específica / Ubicación</label>
+                        <input type="text" name="ubicacion" placeholder="Ej: Carretera Nacional Km 45, Sector El Samán" required>
+                        <small style="color: #555; display: block; margin-top: 5px;">
+                            <i class="fa-solid fa-circle-info"></i> Esta dirección se usará para localizar su finca en Google Maps.
+                        </small>
                     </div>
+
                     <div class="form-row">
-                        <select name="estado" required>
-                            <option value="">Seleccione Estado</option>
-                            <option value="Aragua">Aragua</option>
-                            <option value="Barinas">Barinas</option>
-                            <option value="Guarico">Guárico</option>
-                            <option value="Zulia">Zulia</option>
-                        </select>
-                        <input type="text" name="municipio" placeholder="Municipio" required>
+                        <div style="flex: 2;">
+                            <label>Estado</label>
+                            <select name="estado" required>
+                                <option value="">Seleccione Estado</option>
+                                <option value="Aragua">Aragua</option>
+                                <option value="Apure">Apure</option>
+                                <option value="Barinas">Barinas</option>
+                                <option value="Guarico">Guárico</option>
+                                <option value="Portuguesa">Portuguesa</option>
+                                <option value="Zulia">Zulia</option>
+                                <option value="Cojedes">Cojedes</option>
+                                <option value="Monagas">Monagas</option>
+                            </select>
+                        </div>
+                        <div style="flex: 2;">
+                            <label>Municipio</label>
+                            <input type="text" name="municipio" placeholder="Ej: San Sebastián" required>
+                        </div>
+                        <div style="flex: 1;">
+                            <label>Hectáreas</label>
+                            <input type="number" name="hectareas" placeholder="0.0" step="0.1" required>
+                        </div>
                     </div>
                 </div>
 
@@ -56,7 +79,7 @@
                     <p class="info-text">Suba el diseño oficial del hierro para el marcaje del ganado.</p>
                     <div class="file-input-wrapper">
                         <input type="file" name="hierro" id="hierro-file" accept="image/*" required>
-                        <label for="hierro-file"><i class="fa-solid fa-upload"></i> Subir imagen del hierro</label>
+                        <label for="hierro-file"><i class="fa-solid fa-upload"></i> Seleccionar imagen del hierro</label>
                     </div>
                 </div>
 

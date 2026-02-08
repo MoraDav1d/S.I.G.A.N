@@ -22,8 +22,32 @@
                     <h3><i class="fa-solid fa-tractor"></i> <%= finca.nombre_finca %></h3>
                     
                     <div class="finca-details">
-                        <p><strong><i class="fa-solid fa-location-dot"></i> Ubicación:</strong> <%= finca.municipio %>, <%= finca.estado %></p>
+                        <p>
+                            <strong><i class="fa-solid fa-location-dot"></i> Ubicación:</strong> 
+                            <%= finca.municipio %>, <%= finca.estado %>
+                            
+                            <% 
+                                // Lógica para detectar si el usuario ingresó un link o solo texto
+                                let mapaUrl = "";
+                                if (finca.ubicacion.includes('http') || finca.ubicacion.includes('goo.gl') || finca.ubicacion.includes('maps')) {
+                                    // Si parece un link, lo usamos tal cual
+                                    mapaUrl = finca.ubicacion;
+                                } else {
+                                    // Si es texto, generamos la búsqueda en Google Maps
+                                    mapaUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(finca.ubicacion + ', ' + finca.municipio + ', ' + finca.estado + ', Venezuela')}`;
+                                }
+                            %>
+
+                            <a href="<%= mapaUrl %>" 
+                            target="_blank" 
+                            title="Ver ubicación en el mapa"
+                            style="margin-left: 8px; color: #4285F4; text-decoration: none; font-size: 0.9rem; font-weight: bold; border-bottom: 1px solid #4285F4;">
+                                <i class="fa-solid fa-map-location-dot"></i> Ver Mapa
+                            </a>
+                        </p>
                         <p><strong><i class="fa-solid fa-id-badge"></i> Propietario:</strong> <%= finca.nombre_prop %> <%= finca.apellido_prop %></p>
+                        
+                        <p><strong><i class="fa-solid fa-expand"></i> Extensión:</strong> <%= finca.hectareas %> Hectáreas</p>
                     </div>
 
                     <div style="background: var(--verde-claro); color: white; padding: 15px; border-radius: 10px; margin-top: 15px; display: flex; align-items: center; gap: 15px;">

@@ -32,16 +32,18 @@ db.serialize(() => {
         ubicacion TEXT,
         estado TEXT,
         municipio TEXT,
+        hectareas REAL DEFAULT 0, -- Nueva columna para extensión de tierra
         nombre_prop TEXT,
         apellido_prop TEXT,
         cedula_prop TEXT,
         telefono_prop TEXT,
         correo_prop TEXT,
-        hierro_img TEXT, -- Aquí guardaremos el nombre de la imagen
+        hierro_img TEXT, 
         id_productor INTEGER,
         FOREIGN KEY (id_productor) REFERENCES productores(id_productor)
     )`);
 
+    // 3. Tabla de Ganado
     db.run(`CREATE TABLE IF NOT EXISTS ganado (
         id_animal INTEGER PRIMARY KEY AUTOINCREMENT,
         codigo_arete TEXT UNIQUE, 
@@ -61,23 +63,31 @@ db.serialize(() => {
             console.log("✅ Tabla 'ganado' verificada/creada correctamente.");
         }
     });
-});
 
-db.run(`ALTER TABLE ganado ADD COLUMN proposito TEXT`, (err) => {
-    if (err) {
-        console.log("La columna 'proposito' ya existe o no se pudo agregar.");
-    } else {
-        console.log("✅ Columna 'proposito' agregada con éxito.");
-    }
-});
+    // --- BLOQUE DE ACTUALIZACIONES SEGURAS (ALTER TABLES) ---
 
-db.run(`ALTER TABLE ganado ADD COLUMN codigo_estado INTEGER`, (err) => {
-    if (err) {
-        // Esto es normal si la columna ya fue agregada anteriormente
-        console.log("La columna 'codigo_estado' ya existe o no se pudo agregar.");
-    } else {
-        console.log("✅ Columna 'codigo_estado' agregada con éxito para el Registro Nacional.");
-    }
+    // 1. Agregar hectareas a fincas (por si la tabla ya existía sin ella)
+    db.run(`ALTER TABLE fincas ADD COLUMN hectareas REAL DEFAULT 0`, (err) => {
+        if (err) {
+            // No imprimimos error grave porque es normal que falle si ya existe
+        } else {
+            console.log("✅ Columna 'hectareas' agregada a 'fincas'.");
+        }
+    });
+
+    // 2. Agregar proposito a ganado
+    db.run(`ALTER TABLE ganado ADD COLUMN proposito TEXT`, (err) => {
+        if (err) { /* ya existe */ } else {
+            console.log("✅ Columna 'proposito' agregada a 'ganado'.");
+        }
+    });
+
+    // 3. Agregar codigo_estado a ganado
+    db.run(`ALTER TABLE ganado ADD COLUMN codigo_estado INTEGER`, (err) => {
+        if (err) { /* ya existe */ } else {
+            console.log("✅ Columna 'codigo_estado' agregada a 'ganado'.");
+        }
+    });
 });
 
 module.exports = db;
