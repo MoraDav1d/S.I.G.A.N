@@ -51,6 +51,7 @@ db.serialize(() => {
         fecha_nacimiento DATE,
         peso_inicial REAL,
         proposito TEXT,
+        codigo_estado INTEGER,
         id_finca INTEGER,
         FOREIGN KEY (id_finca) REFERENCES fincas(id_finca)
     )`, (err) => {
@@ -67,6 +68,15 @@ db.run(`ALTER TABLE ganado ADD COLUMN proposito TEXT`, (err) => {
         console.log("La columna 'proposito' ya existe o no se pudo agregar.");
     } else {
         console.log("✅ Columna 'proposito' agregada con éxito.");
+    }
+});
+
+db.run(`ALTER TABLE ganado ADD COLUMN codigo_estado INTEGER`, (err) => {
+    if (err) {
+        // Esto es normal si la columna ya fue agregada anteriormente
+        console.log("La columna 'codigo_estado' ya existe o no se pudo agregar.");
+    } else {
+        console.log("✅ Columna 'codigo_estado' agregada con éxito para el Registro Nacional.");
     }
 });
 

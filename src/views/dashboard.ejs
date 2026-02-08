@@ -53,8 +53,10 @@
                     <a href="/registrar-ganado" class="btn-dash" style="text-decoration: none; display: block; width: 100%;">
                         <i class="fa-solid fa-plus"></i> Registrar Ganado
                     </a>
-                    <button class="btn-dash"><i class="fa-solid fa-list-check"></i> Ver Inventario</button>
-                    <button class="btn-dash"><i class="fa-solid fa-file-pdf"></i> Reporte SIGAN</button>
+                   
+                    <a href="/reporte-sigan" target="_blank" class="btn-dash" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-file-pdf"></i> Reporte SIGAN
+                    </a>
                 </div>
             </div>
         </div>
@@ -66,7 +68,7 @@
                 <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
                     <thead>
                         <tr style="background-color: #2d6a4f; color: white; text-align: left;">
-                            <th style="padding: 10px;">ID / Arete</th>
+                            <th style="padding: 10px;">ID / Arete (Origen)</th>
                             <th style="padding: 10px;">Nombre</th>
                             <th style="padding: 10px;">Raza</th>
                             <th style="padding: 10px;">Sexo</th>
@@ -79,7 +81,12 @@
                     <tbody>
                         <% animales.forEach(animal => { %>
                             <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 10px;"><strong><%= animal.codigo_arete %></strong></td>
+                                <td style="padding: 10px;">
+                                    <span style="color: #666; font-size: 0.85rem; font-weight: normal;">
+                                        <%= (animal.codigo_estado || 0).toString().padStart(2, '0') %> -
+                                    </span>
+                                    <strong><%= animal.codigo_arete %></strong>
+                                </td>
                                 <td style="padding: 10px;"><%= animal.nombre_animal || 'N/A' %></td>
                                 <td style="padding: 10px;"><%= animal.raza %></td>
                                 <td style="padding: 10px;"><%= animal.sexo %></td>
@@ -90,8 +97,12 @@
                                 </td>
                                 <td style="padding: 10px;"><%= animal.peso_inicial %> Kg</td>
                                 <td style="padding: 10px;"><%= animal.fecha_nacimiento %></td>
-                                <td style="padding: 10px; text-align: center;">
-                                    <form action="/auth/eliminar-animal/<%= animal.id_animal %>" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este ejemplar del sistema nacional?');">
+                                <td style="padding: 10px; text-align: center; display: flex; gap: 5px; justify-content: center;">
+                                    <a href="/editar-ganado/<%= animal.id_animal %>" style="background: #2a9d8f; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none;">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+
+                                    <form action="/auth/eliminar-animal/<%= animal.id_animal %>" method="POST" onsubmit="return confirm('...');">
                                         <button type="submit" style="background: #e63946; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>

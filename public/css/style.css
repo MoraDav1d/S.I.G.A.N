@@ -390,11 +390,7 @@ footer {
 }
 
 /* --- Dashboard Layout --- */
-.dashboard-container {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 20px;
-}
+
 
 .dash-header {
     margin-bottom: 30px;
@@ -632,6 +628,9 @@ footer {
     box-shadow: 20px 20px 0px #027e44; /* Un detalle de diseño con tu color */
 }
 
+.menu-toggle {
+    display: none; /* Oculto en PC */
+}
 /* ==========================================================================
    4. RESPONSIVE DESIGN (Corrección definitiva)
    ========================================================================== */
@@ -693,3 +692,4 @@ footer {
 
     .about-flex, .grid-2 { flex-direction: column; text-align: center; }
 }
+

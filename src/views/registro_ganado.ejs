@@ -34,21 +34,27 @@
                 <div class="form-section">
                     <h3><i class="fa-solid fa-dna"></i> Datos Biológicos</h3>
                     <div class="form-row">
-                        <select name="raza" required class="input-wrapper" style="padding: 10px; border-radius: 10px; border: 1.5px solid #2d6a4f;">
-                            <option value="" disabled selected>Seleccione la Raza</option>
-                            <option value="Brahman">Brahman</option>
-                            <option value="Carora">Carora</option>
-                            <option value="Holstein">Holstein</option>
-                            <option value="Jersey">Jersey</option>
-                            <option value="Guzerat">Guzerat</option>
-                            <option value="Mestizo">Mestizo</option>
-                        </select>
+                        <div class="input-wrapper" style="flex: 1; display: flex;">
+                            <i class="fa-solid fa-cow" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #333;"></i>
+                            <select name="raza" required style="width: 100%; padding: 15px 15px 15px 45px; border-radius: 10px; border: 1.5px solid #2d6a4f; appearance: none; background: white;">
+                                <option value="" disabled selected>Seleccione la Raza</option>
+                                <option value="Brahman">Brahman</option>
+                                <option value="Carora">Carora</option>
+                                <option value="Holstein">Holstein</option>
+                                <option value="Jersey">Jersey</option>
+                                <option value="Guzerat">Guzerat</option>
+                                <option value="Mestizo">Mestizo</option>
+                            </select>
+                        </div>
                         
-                        <select name="sexo" required class="input-wrapper" style="padding: 10px; border-radius: 10px; border: 1.5px solid #2d6a4f;">
-                            <option value="" disabled selected>Sexo</option>
-                            <option value="Macho">Macho (Toro/Novillo)</option>
-                            <option value="Hembra">Hembra (Vaca/Novilla)</option>
-                        </select>
+                        <div class="input-wrapper" style="flex: 1; display: flex;">
+                            <i class="fa-solid fa-venus-mars" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #333;"></i>
+                            <select name="sexo" required style="width: 100%; padding: 15px 15px 15px 45px; border-radius: 10px; border: 1.5px solid #2d6a4f; appearance: none; background: white;">
+                                <option value="" disabled selected>Sexo</option>
+                                <option value="Macho">Macho (Toro/Novillo)</option>
+                                <option value="Hembra">Hembra (Vaca/Novilla)</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="form-row">
@@ -58,19 +64,51 @@
                         </div>
                         <div class="input-wrapper">
                             <p style="font-size: 0.8rem; color: #666; margin-bottom: 5px;">Peso Inicial (Kg)</p>
-                            <input type="number" name="peso_inicial" step="0.01" placeholder="Ej: 350.50">
+                            <input type="number" name="peso_inicial" step="0.01" placeholder="Ej: 350.50" required>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-section">
-                    <h3><i class="fa-solid fa-sthetoscope"></i> Propósito Productivo</h3>
+                    <h3><i class="fa-solid fa-location-dot"></i> Procedencia y Propósito</h3>
                     <div class="form-row">
-                        <select name="proposito" required class="input-wrapper" style="padding: 10px; border-radius: 10px; border: 1.5px solid #2d6a4f; width: 100%;">
-                            <option value="Carne">Producción de Carne</option>
-                            <option value="Leche">Producción de Leche</option>
-                            <option value="Doble">Doble Propósito</option>
-                        </select>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-map-pin"></i>
+                            <select name="codigo_estado" required style="width: 100%; padding: 15px 15px 15px 45px; border-radius: 10px; border: 1.5px solid #2d6a4f; outline: none; appearance: none; background: white;">
+                                <option value="" disabled selected>Estado de Origen</option>
+                                <option value="1">1 - Anzoátegui</option>
+                                <option value="2">2 - Apure</option>
+                                <option value="3">3 - Aragua</option>
+                                <option value="4">4 - Barinas</option>
+                                <option value="5">5 - Bolívar</option>
+                                <option value="6">6 - Carabobo</option>
+                                <option value="7">7 - Cojedes</option>
+                                <option value="8">8 - Falcón</option>
+                                <option value="9">9 - Guarico</option>
+                                <option value="10">10 - Lara</option>
+                                <option value="11">11 - Merida</option>
+                                <option value="12">12 - Miranda</option>
+                                <option value="13">13 - Monagas</option>
+                                <option value="14">14 - Nueva Esparta</option>
+                                <option value="15">15 - Portuguesa</option>
+                                <option value="16">16 - Sucre</option>
+                                <option value="17">17 - Tachira</option>
+                                <option value="18">18 - Trujillo</option>
+                                <option value="19">19 - Yaracuy</option>
+                                <option value="20">20 - Zulia</option>
+                                <option value="21">21 - Distrito Capital</option>
+                                <option value="22">22 - Amazonas</option>
+                                <option value="23">23 - Delta Amacuro</option>
+                                <option value="24">24 - La Guaira</option>
+                            </select>
+                        </div>
+                        <div class="input-wrapper">
+                            <select name="proposito" required style="width: 100%; padding: 15px; border-radius: 10px; border: 1.5px solid #2d6a4f; outline: none; background: white;">
+                                <option value="Producción de Carne">Producción de Carne</option>
+                                <option value="Producción de Leche">Producción de Leche</option>
+                                <option value="Doble Propósito">Doble Propósito</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 

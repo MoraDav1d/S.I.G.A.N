@@ -3,7 +3,15 @@ const multer = require('multer');
 const path = require('path');
 const db = require('../models/db');
 
-// --- CONFIGURACIÓN DE MULTER (Subida de fotos) ---
+const estadosVenezuela = {
+    1: "Anzoátegui", 2: "Apure", 3: "Aragua", 4: "Barinas", 5: "Bolívar",
+    6: "Carabobo", 7: "Cojedes", 8: "Falcón", 9: "Guárico", 10: "Lara",
+    11: "Mérida", 12: "Miranda", 13: "Monagas", 14: "Nueva Esparta", 15: "Portuguesa",
+    16: "Sucre", 17: "Táchira", 18: "Trujillo", 19: "Yaracuy", 20: "Zulia",
+    21: "Distrito Capital", 22: "Amazonas", 23: "Delta Amacuro", 24: "La Guaira"
+};
+
+// --- CONFIGURACIÓN DE MULTER ---
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public/uploads/');
@@ -14,9 +22,9 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-exports.upload = upload.single('hierro'); // 'hierro' es el name del input en el EJS
+exports.upload = upload.single('hierro');
 
-// --- LÓGICA DE REGISTRO DE USUARIO (EL PRODUCTOR/SOBRINO) ---
+// --- REGISTRO DE USUARIO ---
 exports.register = (req, res) => {
     User.create(req.body, (err) => {
         if (err) return res.send("Error: La cédula o correo ya existen.");
@@ -24,28 +32,22 @@ exports.register = (req, res) => {
     });
 };
 
-// --- LÓGICA DE LOGIN ---
+// --- LOGIN ---
 exports.login = (req, res) => {
     const { correo, password } = req.body;
     User.findByEmail(correo, (err, user) => {
         if (err || !user || user.password !== password) {
             return res.send("Correo o contraseña incorrectos.");
         }
-        
-        // Iniciamos la sesión
         req.session.userId = user.id_productor;
         req.session.userName = user.nombre; 
-        
         res.redirect('/dashboard');
     });
 };
 
-// --- LÓGICA DE REGISTRO DE FINCA (DATOS DEL PROPIETARIO/ABUELO) ---
+// --- REGISTRO DE FINCA ---
 exports.registrarTodo = (req, res) => {
-    // Verificamos si hay sesión (seguridad extra)
-    if (!req.session.userId) {
-        return res.redirect('/login');
-    }
+    if (!req.session.userId) return res.redirect('/login');
 
     const { 
         nombre_finca, estado, municipio, ubicacion, 
@@ -66,74 +68,92 @@ exports.registrarTodo = (req, res) => {
     ];
 
     db.run(sql, params, function(err) {
-        if (err) {
-            console.error("Error al insertar finca:", err.message);
-            return res.status(500).send("Error al registrar la finca en la base de datos.");
-        }
-        
-        console.log(`✅ Finca "${nombre_finca}" registrada con éxito por el usuario ID: ${id_productor}`);
-        
-        // Redirigimos al Dashboard para que vea su nueva finca
+        if (err) return res.status(500).send("Error al registrar la finca.");
         res.redirect('/dashboard');
     });
 };
 
+// --- REGISTRO DE GANADO MODIFICADO ---
 exports.registrarGanado = (req, res) => {
     const { codigo_arete, nombre_animal, raza, sexo, fecha_nacimiento, peso_inicial, proposito } = req.body;
     const id_productor = req.session.userId;
 
-    // Primero: Necesitamos saber el ID de la finca de este productor
-    db.get(`SELECT id_finca FROM fincas WHERE id_productor = ?`, [id_productor], (err, finca) => {
+    // 1. Buscamos de qué estado es la finca para obtener el código numérico
+    db.get(`SELECT id_finca, estado FROM fincas WHERE id_productor = ?`, [id_productor], (err, finca) => {
         if (err || !finca) {
             return res.send("Error: No tienes una finca registrada para agregar ganado.");
         }
 
-        const id_finca = finca.id_finca;
+        // 2. Mapeamos el nombre del estado al código numérico (ej: "Barinas" -> 4)
+        const codigo_estado = Object.keys(estadosVenezuela).find(key => estadosVenezuela[key] === finca.estado);
 
-        // Segundo: Insertamos el animal vinculado a esa finca
+        // 3. Insertamos el animal incluyendo el nuevo campo codigo_estado
         const sql = `INSERT INTO ganado 
-            (codigo_arete, nombre_animal, raza, sexo, fecha_nacimiento, peso_inicial, proposito, id_finca) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+            (codigo_arete, nombre_animal, raza, sexo, fecha_nacimiento, peso_inicial, proposito, codigo_estado, id_finca) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-        const params = [codigo_arete, nombre_animal, raza, sexo, fecha_nacimiento, peso_inicial, proposito, id_finca];
+        const params = [
+            codigo_arete, 
+            nombre_animal, 
+            raza, 
+            sexo, 
+            fecha_nacimiento, 
+            peso_inicial, 
+            proposito, 
+            codigo_estado || 0, // Si no se encuentra el estado, pone 0 por defecto
+            finca.id_finca
+        ];
 
         db.run(sql, params, function(err) {
             if (err) {
                 console.error(err.message);
                 return res.send("Error al registrar el animal (¿El arete ya existe?).");
             }
-            // Después de guardar, lo devolvemos al Dashboard
             res.redirect('/dashboard?success=animal_registrado');
         });
     });
 };
 
+// --- ELIMINAR ANIMAL ---
 exports.eliminarAnimal = (req, res) => {
-    const id_animal = req.params.id; // Obtenemos el ID de la URL
+    const id_animal = req.params.id;
     const id_productor = req.session.userId;
 
-    // Verificamos que el animal pertenece a la finca del usuario por seguridad
     const sql = `DELETE FROM ganado 
                  WHERE id_animal = ? 
                  AND id_finca = (SELECT id_finca FROM fincas WHERE id_productor = ?)`;
 
     db.run(sql, [id_animal, id_productor], function(err) {
-        if (err) {
-            console.error("Error al eliminar:", err.message);
-            return res.send("Error al eliminar el animal.");
-        }
-        console.log(`🗑️ Animal con ID ${id_animal} eliminado.`);
+        if (err) return res.send("Error al eliminar el animal.");
         res.redirect('/dashboard');
+    });
+};
+
+exports.actualizarGanado = (req, res) => {
+    const id_animal = req.params.id;
+    const { nombre_animal, raza, sexo, peso_inicial, proposito } = req.body;
+    const id_productor = req.session.userId;
+
+    const sql = `UPDATE ganado SET 
+                 nombre_animal = ?, raza = ?, sexo = ?, peso_inicial = ?, proposito = ?
+                 WHERE id_animal = ? 
+                 AND id_finca = (SELECT id_finca FROM fincas WHERE id_productor = ?)`;
+
+    const params = [nombre_animal, raza, sexo, peso_inicial, proposito, id_animal, id_productor];
+
+    db.run(sql, params, function(err) {
+        if (err) {
+            console.error(err.message);
+            return res.send("Error al actualizar el animal.");
+        }
+        res.redirect('/dashboard?success=actualizado');
     });
 };
 
 // --- CERRAR SESIÓN ---
 exports.logout = (req, res) => {
     req.session.destroy((err) => {
-        if (err) {
-            console.log("Error al cerrar sesión:", err);
-        }
-        res.clearCookie('connect.sid'); // Limpia la cookie del navegador
+        res.clearCookie('connect.sid');
         res.redirect('/login');
     });
 };
