@@ -18,8 +18,28 @@ exports.register = (req, res) => {
     if (!errors.isEmpty()) {
         return res.render('registro', { errores: errors.array(), datos: req.body });
     }
-    User.create(req.body, (err) => {
-        if (err) return res.render('registro', { errores: [{ msg: "Cédula o Correo ya registrado" }], datos: req.body });
+
+    // Unificamos el prefijo (0412, 0424, etc) con el número base
+    const telefonoCompleto = req.body.codigo + req.body.telefono_base;
+    
+    // Preparamos los datos, asegurando el correo en minúsculas
+    const datosParaGuardar = {
+        nombre: req.body.nombre,
+        apellido: req.body.apellido,
+        cedula: req.body.cedula,
+        telefono: telefonoCompleto,
+        correo: req.body.correo.toLowerCase().trim(),
+        password: req.body.password
+    };
+
+    User.create(datosParaGuardar, (err) => {
+        if (err) {
+            console.error("Error al crear usuario:", err);
+            return res.render('registro', { 
+                errores: [{ msg: "La cédula o el correo ya están registrados en el sistema" }], 
+                datos: req.body 
+            });
+        }
         res.redirect('/login');
     });
 };
@@ -27,7 +47,9 @@ exports.register = (req, res) => {
 exports.checkEmail = (req, res) => {
     let { email } = req.query;
     if (!email) return res.json({ exists: false });
-    User.findByEmail(email.trim(), (err, user) => {
+    
+    // Buscamos siempre en minúsculas para que coincida con lo que guardamos
+    User.findByEmail(email.toLowerCase().trim(), (err, user) => {
         if (user) return res.json({ exists: true });
         res.json({ exists: false });
     });
@@ -35,7 +57,7 @@ exports.checkEmail = (req, res) => {
 
 exports.login = (req, res) => {
     const { correo, password } = req.body;
-    User.findByEmail(correo, (err, user) => {
+    User.findByEmail(correo.toLowerCase().trim(), (err, user) => {
         if (err || !user || user.password !== password) {
             return res.render('login', { error: "Credenciales incorrectas" });
         }

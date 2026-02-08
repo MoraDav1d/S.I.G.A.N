@@ -628,6 +628,75 @@ footer {
     box-shadow: 20px 20px 0px #027e44; /* Un detalle de diseño con tu color */
 }
 
+/* --- AJUSTES DE REGISTRO SIGAN --- */
+
+/* Contenedor relativo para que el ojito sepa dónde pararse */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Evita que el texto se escriba debajo del ojo */
+.password-wrapper input {
+    padding-right: 45px !important;
+}
+
+/* El Ojito: Totalmente a la derecha y centrado verticalmente */
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    z-index: 100; /* Prioridad de clic */
+    font-size: 1.1rem;
+    padding: 5px;
+}
+
+.toggle-password:hover {
+    color: #2d6a4f;
+}
+
+/* Errores estéticos */
+.error-hint {
+    color: #e74c3c;
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: block;
+    margin: 5px 0 10px 5px;
+}
+
+/* Filas de Cédula y Teléfono (Alineación perfecta) */
+.row-custom {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.prefix-tag {
+    background: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: #2d6a4f;
+}
+
+.select-custom {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    background: white;
+    font-family: inherit;
+    cursor: pointer;
+}
+
 .menu-toggle {
     display: none; /* Oculto en PC */
 }

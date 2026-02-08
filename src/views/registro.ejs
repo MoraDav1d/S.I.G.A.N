@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGAN | Registro de Productor</title>
+    <title>SIGAN | Registro</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -13,120 +13,151 @@
     <div class="login-page-container">
         <div class="login-card" style="max-width: 500px;"> 
             <h2>Crear Cuenta</h2>
-            <p class="subtitle">Regístrese en el Sistema Integral de Gestión Agropecuaria</p>
-
-            <% if (locals.errores) { %>
-                <div style="background: #fee2e2; color: #b91c1c; padding: 10px; border-radius: 5px; margin-bottom: 20px; font-size: 0.85rem;">
-                    <ul style="margin: 0; padding-left: 20px;">
-                        <% errores.forEach(error => { %>
-                            <li><%= error.msg %></li>
-                        <% }) %>
-                    </ul>
-                </div>
-            <% } %>
+            <p class="subtitle">Ingrese sus datos de productor</p>
 
             <form action="/auth/register" method="POST" id="registroForm">
+                
                 <div class="form-row">
-                    <div class="input-wrapper">
+                    <div class="input-wrapper" id="box-nombre">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" name="nombre" placeholder="Nombre" value="<%= locals.datos ? datos.nombre : '' %>" required>
+                        <input type="text" name="nombre" id="nombre" placeholder="Nombre" required>
                     </div>
-                    <div class="input-wrapper">
+                    <div class="input-wrapper" id="box-apellido">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" name="apellido" placeholder="Apellido" value="<%= locals.datos ? datos.apellido : '' %>" required>
+                        <input type="text" name="apellido" id="apellido" placeholder="Apellido" required>
                     </div>
                 </div>
+                <small id="error-names" class="error-hint"></small>
 
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-id-card"></i>
-                    <input type="text" name="cedula" placeholder="Cédula (V-00.000.000)" value="<%= locals.datos ? datos.cedula : '' %>" required>
+                <div class="row-custom">
+                    <div class="prefix-tag">V-</div>
+                    <div class="input-wrapper" id="box-cedula" style="margin-bottom: 0; flex: 1;">
+                        <input type="text" name="cedula" id="cedula" placeholder="Cédula (Máx 40M)" maxlength="8" required>
+                    </div>
                 </div>
+                <small id="error-cedula" class="error-hint"></small>
 
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-phone"></i>
-                    <input type="tel" name="telefono" placeholder="Teléfono" value="<%= locals.datos ? datos.telefono : '' %>" required>
+                <div class="row-custom">
+                    <select name="codigo" class="select-custom">
+                        <option value="0412">0412</option>
+                        <option value="0414">0414</option>
+                        <option value="0416">0416</option>
+                        <option value="0424">0424</option>
+                        <option value="0426">0426</option>
+                        <option value="0422">0422</option>
+                    </select>
+                    <div class="input-wrapper" id="box-telefono" style="margin-bottom: 0; flex: 1;">
+                        <input type="text" name="telefono_base" id="telefono" placeholder="Número (7 dígitos)" maxlength="7" required>
+                    </div>
                 </div>
+                <small id="error-telefono" class="error-hint"></small>
 
-                <div class="input-wrapper">
+                <div class="input-wrapper" id="box-email">
                     <i class="fa-solid fa-envelope"></i>
-                    <input type="email" name="correo" id="emailInput" placeholder="Correo Electrónico" value="<%= locals.datos ? datos.correo : '' %>" required>
-                    <small id="emailFeedback" style="display:block; margin-top:5px; font-weight: bold;"></small>
+                    <input type="email" name="correo" id="email" placeholder="Correo electrónico" required>
                 </div>
+                <small id="emailFeedback" class="error-hint"></small>
 
-                <div class="input-wrapper" style="margin-bottom: 5px;">
+                <div class="input-wrapper password-wrapper" id="box-pass1">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" name="password" id="passwordInput" placeholder="Cree una contraseña" required>
+                    <input type="password" name="password" id="pass1" placeholder="Contraseña" required>
+                    <i class="fa-solid fa-eye toggle-password" id="eye1" onclick="togglePass('pass1', 'eye1')"></i>
                 </div>
-                <div id="passwordStrength" style="height: 4px; width: 0%; transition: all 0.3s; margin-bottom: 5px; border-radius: 2px;"></div>
-                <small id="passwordFeedback" style="display:block; margin-bottom: 15px; font-size: 0.8rem;"></small>
+                <div id="passBar" style="height:4px; width:0%; transition:0.3s; margin-bottom:5px; border-radius:2px;"></div>
+                <small id="passFeedback" class="error-hint"></small>
 
-                <div class="input-wrapper">
+                <div class="input-wrapper password-wrapper" id="box-pass2">
                     <i class="fa-solid fa-check-double"></i>
-                    <input type="password" name="confirmPassword" id="confirmPasswordInput" placeholder="Confirme su contraseña" required>
+                    <input type="password" name="confirmPassword" id="pass2" placeholder="Confirmar contraseña" required>
+                    <i class="fa-solid fa-eye toggle-password" id="eye2" onclick="togglePass('pass2', 'eye2')"></i>
                 </div>
+                <small id="error-pass2" class="error-hint"></small>
 
-                <button type="submit" class="btn-entrar" id="submitBtn">Crear Mi Cuenta</button>
+                <button type="submit" class="btn-entrar" id="submitBtn">Registrar Productor</button>
             </form>
-
-            <p class="footer-text">
-                ¿Ya tiene una cuenta activa? <a href="/login">Inicie Sesión aquí</a>
-            </p>
         </div>
     </div>
 
     <script>
-        const passwordInput = document.getElementById('passwordInput');
-        const passwordStrength = document.getElementById('passwordStrength');
-        const passwordFeedback = document.getElementById('passwordFeedback');
-        const emailInput = document.getElementById('emailInput');
-        const emailFeedback = document.getElementById('emailFeedback');
+        function togglePass(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+
         const submitBtn = document.getElementById('submitBtn');
 
-        // 1. Validación de Contraseña en tiempo real
-        passwordInput.addEventListener('input', () => {
-            const val = passwordInput.value;
-            let score = 0;
-            if (val.length >= 8) score++;
-            if (/[A-Z]/.test(val)) score++;
-            if (/\d/.test(val)) score++;
+        // Nombres sin números
+        ['nombre', 'apellido'].forEach(id => {
+            document.getElementById(id).addEventListener('input', (e) => {
+                const box = document.getElementById('box-' + id);
+                if (/[0-9]/.test(e.target.value)) {
+                    document.getElementById('error-names').textContent = "❌ No se permiten números";
+                    box.style.border = "1.5px solid red";
+                } else {
+                    document.getElementById('error-names').textContent = "";
+                    box.style.border = "1px solid #ccc";
+                }
+            });
+        });
 
-            const colors = ['#ff4d4d', '#ffa500', '#2ecc71'];
-            const messages = ['Débil (mínimo 8 caracteres)', 'Media (falta mayúscula o número)', '¡Contraseña Segura!'];
-
-            if (val.length === 0) {
-                passwordStrength.style.width = '0%';
-                passwordFeedback.textContent = '';
+        // Cédula Venezolana estricta
+        document.getElementById('cedula').addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/\D/g, '');
+            const val = e.target.value;
+            const err = document.getElementById('error-cedula');
+            const box = document.getElementById('box-cedula');
+            if (val.length > 0 && (val.length < 7 || parseInt(val) > 40000000)) {
+                err.textContent = "❌ Cédula inválida (7-8 dígitos, menor a 40M)";
+                box.style.border = "1.5px solid red";
             } else {
-                passwordStrength.style.width = (score + 1) * 33.3 + '%';
-                passwordStrength.style.backgroundColor = colors[score] || colors[0];
-                passwordFeedback.textContent = messages[score] || messages[0];
-                passwordFeedback.style.color = colors[score] || colors[0];
+                err.textContent = "";
+                box.style.border = "1px solid #ccc";
             }
         });
 
-        // 2. Verificación de Correo (AJAX)
-        emailInput.addEventListener('blur', async () => {
-            const email = emailInput.value;
+        // Correo (AJAX)
+        document.getElementById('email').addEventListener('blur', async (e) => {
+            const email = e.target.value.trim().toLowerCase();
+            const feed = document.getElementById('emailFeedback');
             if (email.includes('@')) {
-                try {
-                    const response = await fetch(`/auth/check-email?email=${email}`);
-                    const data = await response.json();
-                    if (data.exists) {
-                        emailFeedback.textContent = '❌ Este correo ya está registrado';
-                        emailFeedback.style.color = '#ff4d4d';
-                        submitBtn.disabled = true;
-                        submitBtn.style.opacity = '0.5';
-                    } else {
-                        emailFeedback.textContent = '✅ Correo disponible';
-                        emailFeedback.style.color = '#2ecc71';
-                        submitBtn.disabled = false;
-                        submitBtn.style.opacity = '1';
-                    }
-                } catch (err) { console.error(err); }
+                const res = await fetch(`/auth/check-email?email=${email}`);
+                const data = await res.json();
+                if (data.exists) {
+                    feed.innerHTML = 'Este correo ya existe, <a href="/login" style="color:red; text-decoration:underline;">intenta iniciar sesión</a>';
+                    submitBtn.disabled = true;
+                } else {
+                    feed.textContent = "";
+                    submitBtn.disabled = false;
+                }
             }
+        });
+
+        // Fuerza de contraseña
+        document.getElementById('pass1').addEventListener('input', (e) => {
+            const v = e.target.value;
+            const bar = document.getElementById('passBar');
+            const feed = document.getElementById('passFeedback');
+            let strong = v.length >= 8 && /[A-Z]/.test(v) && /\d/.test(v);
+            feed.textContent = strong ? "✅ Contraseña segura" : "⚠️ Falta: 8 caracteres, mayúscula y número";
+            feed.style.color = strong ? "green" : "red";
+            bar.style.width = strong ? "100%" : "30%";
+            bar.style.backgroundColor = strong ? "green" : "red";
+        });
+
+        // Coincidencia
+        document.getElementById('pass2').addEventListener('input', (e) => {
+            const p1 = document.getElementById('pass1').value;
+            const err = document.getElementById('error-pass2');
+            err.textContent = (e.target.value === p1) ? "✅ Coinciden" : "❌ No coinciden";
+            err.style.color = (e.target.value === p1) ? "green" : "red";
         });
     </script>
-
-    <%- include('partials/footer') %>
 </body>
 </html>
