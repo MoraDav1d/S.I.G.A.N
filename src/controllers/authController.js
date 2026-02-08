@@ -3,6 +3,8 @@ const db = require('../models/db');
 const { validationResult } = require('express-validator');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs'); // Requerido para manejar archivos
+const resemble = require('resemblejs'); // Requerido para comparar imágenes
 
 // --- CONFIGURACIÓN DE MULTER ---
 const storage = multer.diskStorage({
@@ -36,7 +38,7 @@ exports.login = (req, res) => {
     });
 };
 
-// --- VALIDACIÓN AJAX (NUEVA FUNCIÓN REQUERIDA) ---
+// --- VALIDACIÓN AJAX ---
 exports.checkEmail = (req, res) => {
     let { email } = req.query;
     if (!email) return res.json({ exists: false });
@@ -48,13 +50,64 @@ exports.checkEmail = (req, res) => {
     });
 };
 
-// --- GESTIÓN DE FINCA ---
-exports.registrarTodo = (req, res) => {
+// --- GESTIÓN DE FINCA CON IDENTIFICADOR DE HIERROS (RETO) ---
+exports.registrarTodo = async (req, res) => {
     if (!req.session.userId) return res.redirect('/login');
+    
     const { nombre_finca, estado, municipio, ubicacion, nombre_prop, apellido_prop, cedula, telefono, correo } = req.body;
-    const hierro_img = req.file ? req.file.filename : null;
+    const nuevoHierroPath = req.file ? req.file.path : null;
+    const nombreArchivoNuevo = req.file ? req.file.filename : null;
+
+    if (nuevoHierroPath) {
+        // Ruta de la carpeta donde están todos los hierros
+        const directorioUps = path.join(__dirname, '../../public/uploads/');
+        
+        try {
+            // Leer archivos existentes (excluyendo el que acabamos de subir)
+            const archivos = fs.readdirSync(directorioUps).filter(file => file !== nombreArchivoNuevo);
+
+            for (const archivo of archivos) {
+                const rutaExistente = path.join(directorioUps, archivo);
+                
+                // Comparación asíncrona de imágenes
+                const data = await new Promise((resolve) => {
+                    resemble(nuevoHierroPath)
+                        .compareTo(rutaExistente)
+                        .ignoreColors() // Nos enfocamos en la forma del hierro
+                        .onComplete(resolve);
+                });
+
+                // Si la diferencia es menor al 15% (85% de similitud)
+                if (data.misMatchPercentage < 15) {
+                    // Borrar el archivo recién subido por ser duplicado/parecido
+                    fs.unlinkSync(nuevoHierroPath); 
+                    
+                    return res.send(`
+                        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 50px; background-color: #f8f9fa;">
+                            <div style="max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                                <h2 style="color: #bc4749;">⚠️ ALERTA DE SIMILITUD</h2>
+                                <p style="color: #333; font-size: 1.1em;">El sistema ha detectado que su hierro es un <b>${(100 - data.misMatchPercentage).toFixed(2)}% idéntico</b> a uno ya registrado.</p>
+                                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+                                <p style="font-weight: bold; color: #1b4332;">Hierro existente en base de datos:</p>
+                                <img src="/uploads/${archivo}" style="width: 180px; height: 180px; object-fit: contain; border: 3px solid #bc4749; border-radius: 10px; padding: 5px;">
+                                <p style="margin-top: 20px; color: #666;">Por razones de seguridad legal y para evitar conflictos de propiedad entre fincas, no se permite el uso de marcas tan similares.</p>
+                                <div style="margin-top: 30px;">
+                                    <a href="/registro-finca" style="background: #1b4332; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Modificar mi diseño</a>
+                                </div>
+                                <p style="margin-top: 25px; font-size: 0.85em; color: #888;">Sugerencia: Acuda a las oficinas del INSAI para validar un nuevo diseño oficial.</p>
+                            </div>
+                        </div>
+                    `);
+                }
+            }
+        } catch (error) {
+            console.error("Error en el comparador de hierros:", error);
+        }
+    }
+
+    // Si no hubo conflictos, se procede al registro normal
     const sql = `INSERT INTO fincas (nombre_finca, estado, municipio, ubicacion, nombre_prop, apellido_prop, cedula_prop, telefono_prop, correo_prop, hierro_img, id_productor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    db.run(sql, [nombre_finca, estado, municipio, ubicacion, nombre_prop, apellido_prop, cedula, telefono, correo, hierro_img, req.session.userId], (err) => {
+    db.run(sql, [nombre_finca, estado, municipio, ubicacion, nombre_prop, apellido_prop, cedula, telefono, correo, nombreArchivoNuevo, req.session.userId], (err) => {
         if (err) return res.status(500).send("Error al registrar finca.");
         res.redirect('/dashboard');
     });
