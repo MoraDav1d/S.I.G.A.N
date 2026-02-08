@@ -14,9 +14,16 @@ const User = {
     
     // Buscar usuario por correo (Insensible a mayúsculas/minúsculas)
     findByEmail: (email, callback) => {
-        // Usamos LOWER para comparar siempre en minúsculas y encontrar coincidencias exactas
         const sql = `SELECT * FROM productores WHERE LOWER(correo) = LOWER(?)`;
         db.get(sql, [email.trim()], (err, row) => {
+            callback(err, row);
+        });
+    },
+
+    // NUEVO: Buscar usuario por cédula
+    findByCedula: (cedula, callback) => {
+        const sql = `SELECT * FROM productores WHERE cedula = ?`;
+        db.get(sql, [cedula], (err, row) => {
             callback(err, row);
         });
     }

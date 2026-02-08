@@ -11,42 +11,41 @@
     <%- include('partials/navbar') %>
 
     <div class="login-page-container">
-        <div class="login-card" style="max-width: 500px;"> 
+        <div class="login-card"> 
             <h2>Crear Cuenta</h2>
             <p class="subtitle">Ingrese sus datos de productor</p>
 
             <form action="/auth/register" method="POST" id="registroForm">
-                
                 <div class="form-row">
                     <div class="input-wrapper" id="box-nombre">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" name="nombre" id="nombre" placeholder="Nombre" required>
+                        <input type="text" name="nombre" id="nombre" placeholder="Nombre" required autocomplete="off">
                     </div>
                     <div class="input-wrapper" id="box-apellido">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" name="apellido" id="apellido" placeholder="Apellido" required>
+                        <input type="text" name="apellido" id="apellido" placeholder="Apellido" required autocomplete="off">
                     </div>
                 </div>
                 <small id="error-names" class="error-hint"></small>
 
                 <div class="row-custom">
                     <div class="prefix-tag">V-</div>
-                    <div class="input-wrapper" id="box-cedula" style="margin-bottom: 0; flex: 1;">
-                        <input type="text" name="cedula" id="cedula" placeholder="Cédula (Máx 40M)" maxlength="8" required>
+                    <div class="input-wrapper" id="box-cedula">
+                        <input type="text" name="cedula" id="cedula" placeholder="Cédula (Máx 35M)" maxlength="8" required>
                     </div>
                 </div>
                 <small id="error-cedula" class="error-hint"></small>
 
                 <div class="row-custom">
-                    <select name="codigo" class="select-custom">
+                    <select name="codigo" id="codigo" class="select-custom">
                         <option value="0412">0412</option>
                         <option value="0414">0414</option>
                         <option value="0416">0416</option>
+                        <option value="0422">0422</option>
                         <option value="0424">0424</option>
                         <option value="0426">0426</option>
-                        <option value="0422">0422</option>
                     </select>
-                    <div class="input-wrapper" id="box-telefono" style="margin-bottom: 0; flex: 1;">
+                    <div class="input-wrapper" id="box-telefono">
                         <input type="text" name="telefono_base" id="telefono" placeholder="Número (7 dígitos)" maxlength="7" required>
                     </div>
                 </div>
@@ -63,7 +62,7 @@
                     <input type="password" name="password" id="pass1" placeholder="Contraseña" required>
                     <i class="fa-solid fa-eye toggle-password" id="eye1" onclick="togglePass('pass1', 'eye1')"></i>
                 </div>
-                <div id="passBar" style="height:4px; width:0%; transition:0.3s; margin-bottom:5px; border-radius:2px;"></div>
+                <div id="passBar"></div>
                 <small id="passFeedback" class="error-hint"></small>
 
                 <div class="input-wrapper password-wrapper" id="box-pass2">
@@ -79,6 +78,8 @@
     </div>
 
     <script>
+        const submitBtn = document.getElementById('submitBtn');
+
         function togglePass(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
@@ -91,38 +92,74 @@
             }
         }
 
-        const submitBtn = document.getElementById('submitBtn');
+        // Bloqueo de teclas no numéricas
+        ['cedula', 'telefono'].forEach(id => {
+            document.getElementById(id).addEventListener('keypress', (e) => {
+                if (!/[0-9]/.test(e.key)) e.preventDefault();
+            });
+        });
 
-        // Nombres sin números
+        // Validación Nombres
         ['nombre', 'apellido'].forEach(id => {
             document.getElementById(id).addEventListener('input', (e) => {
                 const box = document.getElementById('box-' + id);
-                if (/[0-9]/.test(e.target.value)) {
-                    document.getElementById('error-names').textContent = "❌ No se permiten números";
-                    box.style.border = "1.5px solid red";
+                if (/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/.test(e.target.value)) {
+                    document.getElementById('error-names').textContent = "❌ Solo letras";
+                    box.classList.add('error-border');
                 } else {
                     document.getElementById('error-names').textContent = "";
-                    box.style.border = "1px solid #ccc";
+                    box.classList.remove('error-border');
                 }
             });
         });
 
-        // Cédula Venezolana estricta
-        document.getElementById('cedula').addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/\D/g, '');
+// AJAX Cédula (Solo advertencia)
+        document.getElementById('cedula').addEventListener('blur', async (e) => {
             const val = e.target.value;
             const err = document.getElementById('error-cedula');
             const box = document.getElementById('box-cedula');
-            if (val.length > 0 && (val.length < 7 || parseInt(val) > 40000000)) {
-                err.textContent = "❌ Cédula inválida (7-8 dígitos, menor a 40M)";
-                box.style.border = "1.5px solid red";
-            } else {
-                err.textContent = "";
-                box.style.border = "1px solid #ccc";
+            
+            if (val.length >= 7) {
+                const res = await fetch(`/auth/check-cedula?cedula=${val}`);
+                const data = await res.json();
+                
+                if (data.exists) {
+                    err.textContent = "❌ Esta cédula ya está registrada";
+                    box.classList.add('error-border');
+                    submitBtn.disabled = true;
+                } else if (parseInt(val) > 35000000) {
+                    err.textContent = "❌ Cédula inválida (Máximo 35 Millones)";
+                    box.classList.add('error-border');
+                    submitBtn.disabled = true;
+                } else {
+                    err.textContent = ""; 
+                    box.classList.remove('error-border');
+                    submitBtn.disabled = false;
+                }
             }
         });
 
-        // Correo (AJAX)
+        // AJAX Teléfono
+        document.getElementById('telefono').addEventListener('blur', async (e) => {
+            const num = e.target.value;
+            const cod = document.getElementById('codigo').value;
+            const err = document.getElementById('error-telefono');
+            const box = document.getElementById('box-telefono');
+            if (num.length === 7) {
+                const res = await fetch(`/auth/check-phone?phone=${cod}${num}`);
+                const data = await res.json();
+                if (data.exists) {
+                    err.textContent = "❌ Teléfono ya en uso";
+                    box.classList.add('error-border');
+                    submitBtn.disabled = true;
+                } else {
+                    err.textContent = ""; box.classList.remove('error-border');
+                    submitBtn.disabled = false;
+                }
+            }
+        });
+
+        // AJAX Correo
         document.getElementById('email').addEventListener('blur', async (e) => {
             const email = e.target.value.trim().toLowerCase();
             const feed = document.getElementById('emailFeedback');
@@ -130,33 +167,29 @@
                 const res = await fetch(`/auth/check-email?email=${email}`);
                 const data = await res.json();
                 if (data.exists) {
-                    feed.innerHTML = 'Este correo ya existe, <a href="/login" style="color:red; text-decoration:underline;">intenta iniciar sesión</a>';
+                    feed.innerHTML = '❌ Correo ya registrado. <a href="/login">Entrar</a>';
                     submitBtn.disabled = true;
                 } else {
-                    feed.textContent = "";
-                    submitBtn.disabled = false;
+                    feed.textContent = ""; submitBtn.disabled = false;
                 }
             }
         });
 
-        // Fuerza de contraseña
+        // Contraseñas
         document.getElementById('pass1').addEventListener('input', (e) => {
             const v = e.target.value;
             const bar = document.getElementById('passBar');
             const feed = document.getElementById('passFeedback');
             let strong = v.length >= 8 && /[A-Z]/.test(v) && /\d/.test(v);
-            feed.textContent = strong ? "✅ Contraseña segura" : "⚠️ Falta: 8 caracteres, mayúscula y número";
-            feed.style.color = strong ? "green" : "red";
+            feed.textContent = strong ? "✅ Segura" : "⚠️ Mínimo 8 caracteres, Mayúscula y Número";
             bar.style.width = strong ? "100%" : "30%";
-            bar.style.backgroundColor = strong ? "green" : "red";
+            bar.style.backgroundColor = strong ? "#2d6a4f" : "#e74c3c";
         });
 
-        // Coincidencia
         document.getElementById('pass2').addEventListener('input', (e) => {
             const p1 = document.getElementById('pass1').value;
             const err = document.getElementById('error-pass2');
             err.textContent = (e.target.value === p1) ? "✅ Coinciden" : "❌ No coinciden";
-            err.style.color = (e.target.value === p1) ? "green" : "red";
         });
     </script>
 </body>

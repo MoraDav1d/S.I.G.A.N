@@ -14,23 +14,88 @@
             <h2>Acceso al Sistema</h2>
             <p class="subtitle">Ingrese sus credenciales para gestionar su unidad de producción</p>
 
-            <form action="/auth/login" method="POST">
-                <div class="input-wrapper">
+            <form action="/auth/login" method="POST" id="loginForm">
+                <div class="input-wrapper" id="box-email">
                     <i class="fa-solid fa-user"></i>
-                    <input type="email" name="correo" placeholder="Correo Electrónico" required>
+                    <input type="email" name="correo" id="email" placeholder="Correo Electrónico" required 
+                           value="<%= typeof datos !== 'undefined' ? datos.correo : '' %>">
                 </div>
+                <small id="error-email" class="error-hint"></small>
 
-                <div class="input-wrapper">
+                <div class="input-wrapper password-wrapper" id="box-pass">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" name="password" placeholder="Contraseña" required>
+                    <input type="password" name="password" id="password" placeholder="Contraseña" required>
+                    <i class="fa-solid fa-eye toggle-password" id="eye" onclick="togglePass('password', 'eye')"></i>
                 </div>
+                <small id="error-pass" class="error-hint">
+                    <% if (typeof error !== 'undefined') { %> <%= error %> <% } %>
+                </small>
 
-                <button type="submit" class="btn-entrar">Entrar al Sistema</button>
+                <button type="submit" class="btn-entrar" id="submitBtn">Entrar al Sistema</button>
             </form>
 
             <p class="footer-text">¿Aún no tiene cuenta? <a href="/registro">Regístrese aquí</a></p>
         </div>
     </div>
+
+    <script>
+        // Función para ver/ocultar contraseña
+        function togglePass(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+
+        const emailInput = document.getElementById('email');
+        const emailBox = document.getElementById('box-email');
+        const emailError = document.getElementById('error-email');
+
+        // Validación de Correo en tiempo real (al salir del campo)
+        emailInput.addEventListener('blur', async () => {
+            const email = emailInput.value.trim();
+            if (email.length > 5 && email.includes('@')) {
+                try {
+                    const res = await fetch(`/auth/check-email?email=${email}`);
+                    const data = await res.json();
+                    if (!data.exists) {
+                        emailError.textContent = "❌ Este correo no está registrado";
+                        emailBox.classList.add('error-border');
+                    } else {
+                        emailError.textContent = "";
+                        emailBox.classList.remove('error-border');
+                    }
+                } catch (error) { console.error("Error:", error); }
+            }
+        });
+
+        // Al cargar, si el servidor mandó un error, activamos el borde rojo
+        window.addEventListener('load', () => {
+            const errorMsg = "<%= typeof error !== 'undefined' ? error : '' %>";
+            if (errorMsg.toLowerCase().includes("contraseña")) {
+                document.getElementById('box-pass').classList.add('error-border');
+            } else if (errorMsg.toLowerCase().includes("correo") || errorMsg.toLowerCase().includes("registrado")) {
+                document.getElementById('box-email').classList.add('error-border');
+            }
+        });
+
+        // Limpiar bordes rojos al escribir
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const wrapper = e.target.closest('.input-wrapper');
+                wrapper.classList.remove('error-border');
+                const errorHint = wrapper.nextElementSibling;
+                if(errorHint && errorHint.classList.contains('error-hint')) {
+                    errorHint.textContent = "";
+                }
+            });
+        });
+    </script>
 
     <%- include('partials/footer') %>
 </body>

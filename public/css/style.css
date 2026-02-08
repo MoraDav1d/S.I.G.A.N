@@ -21,7 +21,6 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh; /* Ocupa el alto total de la pantalla */
-    
 }
 
 .dashboard-container, 
@@ -37,18 +36,7 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #1b4332;
-    padding: 15px 50px;
-    color: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-/*LOGO SIGAN*/
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #1b4332; /* Fondo blanco */
+    background: #1b4332; /* Fondo verdad*/
     padding: 10px 50px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.1); /* Sombra para dar profundidad */
     border-bottom: 4px solid var(--verde-medio); /* Línea verde decorativa */
@@ -69,7 +57,7 @@ main {
     transform: scale(1.03);
 }
 
-/* Links en Verde Oscuro para que contrasten con el blanco */
+/* Letras y tamaño de los links*/
 .nav-links li a { 
     text-decoration: none;
     font-weight: 700; /* Letras gorditas como querías */
@@ -77,18 +65,21 @@ main {
     padding: 10px 20px;
     border-radius: 8px;
     transition: all 0.3s ease;
+    color: white;
 }
 
 /* El efecto de sombrita verde clara al pasar el mouse */
 .nav-links li a:hover {
     background-color: rgba(91, 219, 66, 0.315); /* Verde muy suave */
 }
+
 /* Ajuste opcional para el contenedor si necesitas centrarlo mejor */
 .logo-container {
     display: flex;
     align-items: center;
     text-decoration: none;
 }
+
 .nav-links {
     list-style: none;
     display: flex;
@@ -96,22 +87,18 @@ main {
     gap: 25px;
 }
 
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-}
-
 .btn-logout {
     background: #bc4749;
     padding: 8px 15px;
     border-radius: 5px;
+    color: white !important;
 }
 
 .btn-registro-nav {
     background: #74c365;
     padding: 8px 15px;
     border-radius: 5px;
+    color: white !important;
 }
 
 /* Hero Section */
@@ -124,6 +111,7 @@ main {
     
     background: linear-gradient(rgba(27, 67, 50, 0.4), rgba(27, 67, 50, 0.7)), 
                 url('/img/hero-foto.jpg');
+    height: 70vh;
     background-size: cover;
     background-position: center;
     background-attachment: fixed; 
@@ -317,7 +305,7 @@ footer {
     padding: 40px 5%;
     text-align: center;
     border-top: 4px solid var(--dorado);
-    margin-top: auto; /* <--- Esto es clave */
+    margin-top: auto;
 }
 
 .login-page-container {
@@ -325,7 +313,7 @@ footer {
     justify-content: center;
     align-items: center;
     min-height: 80vh;
-    background-color: #f0f2f5; /* Un gris muy claro de fondo */
+    background-color: #f0f2f5; 
 }
 
 /* Tarjeta Blanca */
@@ -335,12 +323,12 @@ footer {
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
     width: 100%;
-    max-width: 450px;
+    max-width: 500px;
     text-align: center;
 }
 
 .login-card h2 {
-    color: #1b4332; /* Tu verde oscuro */
+    color: #1b4332; 
     font-size: 2rem;
     margin-bottom: 10px;
 }
@@ -351,13 +339,22 @@ footer {
     margin-bottom: 30px;
 }
 
+/* --- NUEVO: Limpieza de autocompletado azul --- */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
 /* Envoltura de Inputs con Icono */
 .input-wrapper {
     position: relative;
     margin-bottom: 20px;
+    transition: 0.3s;
 }
 
-.input-wrapper i {
+.input-wrapper i:not(.toggle-password) {
     position: absolute;
     left: 15px;
     top: 50%;
@@ -368,16 +365,20 @@ footer {
 
 .input-wrapper input {
     width: 100%;
-    padding: 15px 15px 15px 45px; /* Espacio extra a la izquierda para el icono */
-    border: 1.5px solid #2d6a4f; /* Borde verde medio */
+    padding: 15px 15px 15px 45px; 
+    border: 1.5px solid #2d6a4f; 
     border-radius: 10px;
     font-size: 1rem;
     outline: none;
     transition: 0.3s;
+    background-color: white;
 }
 
+/* --- NUEVO: Bordes de validación --- */
+.error-border { border-color: #e74c3c !important; }
+
 .input-wrapper input:focus {
-    border-color: #74c365; /* Verde más claro al hacer clic */
+    border-color: #74c365; 
     box-shadow: 0 0 8px rgba(116, 195, 101, 0.2);
 }
 
@@ -385,7 +386,7 @@ footer {
 .btn-entrar {
     width: 100%;
     padding: 15px;
-    background-color: #74c365; /* Verde vibrante de la imagen */
+    background-color: #74c365; 
     color: white;
     border: none;
     border-radius: 10px;
@@ -436,7 +437,7 @@ footer {
 }
 
 .tab-item.active {
-    background-color: #027e44; /* Rojo institucional */
+    background-color: #027e44; 
     color: white;
 }
 
@@ -467,7 +468,7 @@ footer {
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
     width: 100%;
-    max-width: 800px; /* Más ancho que el login */
+    max-width: 800px; 
 }
 
 .form-section {
@@ -531,11 +532,11 @@ footer {
 }
 
 .form-row .input-wrapper {
-    flex: 1; /* Hace que ambos midan lo mismo */
+    flex: 1; 
 }
 
 .logout-link {
-    color: #bc4749 !important; /* Un rojo elegante */
+    color: #bc4749 !important; 
     font-weight: bold;
 }
 
@@ -544,8 +545,6 @@ footer {
 }
 
 /* --- Dashboard Layout --- */
-
-
 .dash-header {
     margin-bottom: 30px;
     border-left: 5px solid #74c365;
@@ -559,20 +558,25 @@ footer {
 
 .dash-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Una columna grande y una pequeña */
-    gap: 25px;
+    grid-template-columns: 1.5fr 1fr; 
+    gap: 30px;
+    align-items: start;
+    margin-top: 20px;
 }
 
 .dash-card {
-    background: white;
-    padding: 25px;
+    background: #ffffff;
+    padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
 }
 
 .dash-card h3 {
     color: #2d6a4f;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -580,18 +584,20 @@ footer {
 
 /* --- Estilo del Hierro --- */
 .hierro-preview {
-    margin-top: 20px;
-    padding: 15px;
-    border: 2px dashed #ddd;
-    border-radius: 10px;
+    background: #f9f9f9;
+    border: 2px dashed #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
     text-align: center;
+    margin-top: 10px;
 }
 
 .hierro-preview img {
-    max-width: 150px;
+    max-width: 180px;
     height: auto;
-    margin-top: 10px;
-    filter: grayscale(1); /* Toque estético para que parezca marca de hierro */
+    display: block;
+    margin: 10px auto 0;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
 }
 
 /* --- Botones del Dashboard --- */
@@ -618,25 +624,6 @@ footer {
     color: white;
 }
 
-/* Contenedor principal del Dashboard */
-.dash-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr; /* Proporción de columnas */
-    gap: 30px;
-    align-items: start;
-    margin-top: 20px;
-}
-
-.dash-card {
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Esto separa automáticamente cada elemento interno */
-}
-
 /* Estilo específico para la info de la finca */
 .main-info h3 {
     font-size: 1.8rem;
@@ -656,25 +643,6 @@ footer {
     color: #2d6a4f;
 }
 
-/* Contenedor de la imagen del hierro para que no flote */
-.hierro-preview {
-    background: #f9f9f9;
-    border: 2px dashed #e0e0e0;
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    margin-top: 10px;
-}
-
-.hierro-preview img {
-    max-width: 180px;
-    height: auto;
-    display: block;
-    margin: 10px auto 0;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-}
-
-/* Espaciado para el botón en caso de que no haya finca */
 .btn-entrar-dash {
     margin-top: 15px;
     display: inline-block;
@@ -687,10 +655,8 @@ footer {
     font-weight: bold;
 }
 
-/*EL INICIO MEJORADO*/
-/* Estilos para el Hero */
+/* INICIO MEJORADO */
 .hero-section {
-    background-image: url('/img/campo-venezolano.jpg'); /* Asegúrate de subir una foto con este nombre */
     background-size: cover;
     background-position: center;
     height: 80vh;
@@ -699,7 +665,7 @@ footer {
 }
 
 .hero-overlay {
-    background: rgba(0, 0, 0, 0.6); /* El filtro oscuro que pidió */
+    background: rgba(0, 0, 0, 0.6); 
     width: 100%;
     height: 100%;
     display: flex;
@@ -719,7 +685,7 @@ footer {
 }
 
 .btn-main {
-    background-color: #027e44; /* Tu verde institucional */
+    background-color: #027e44; 
     color: white;
     padding: 15px 30px;
     text-decoration: none;
@@ -727,7 +693,6 @@ footer {
     font-weight: bold;
 }
 
-/* Estilos para las tarjetas de Misión y Visión */
 .grid-2 {
     display: flex;
     gap: 30px;
@@ -755,7 +720,7 @@ footer {
 }
 
 .about-text h2 {
-    color: #027e44; /* Tu verde institucional */
+    color: #027e44; 
     font-size: 2.5rem;
     margin-bottom: 20px;
 }
@@ -779,12 +744,11 @@ footer {
 .about-image img {
     width: 100%;
     border-radius: 15px;
-    box-shadow: 20px 20px 0px #027e44; /* Un detalle de diseño con tu color */
+    box-shadow: 20px 20px 0px #027e44; 
 }
 
-/* --- AJUSTES DE REGISTRO SIGAN --- */
+/* --- AJUSTES DE REGISTRO SIGAN (ARREGLADOS) --- */
 
-/* Contenedor relativo para que el ojito sepa dónde pararse */
 .password-wrapper {
     position: relative;
     display: flex;
@@ -792,12 +756,11 @@ footer {
     width: 100%;
 }
 
-/* Evita que el texto se escriba debajo del ojo */
 .password-wrapper input {
     padding-right: 45px !important;
 }
 
-/* El Ojito: Totalmente a la derecha y centrado verticalmente */
+/* El Ojito: Corregido con absolute para posicionamiento perfecto */
 .toggle-password {
     position: absolute;
     right: 15px;
@@ -805,7 +768,7 @@ footer {
     transform: translateY(-50%);
     cursor: pointer;
     color: #666;
-    z-index: 100; /* Prioridad de clic */
+    z-index: 100;
     font-size: 1.1rem;
     padding: 5px;
 }
@@ -814,21 +777,36 @@ footer {
     color: #2d6a4f;
 }
 
-/* Errores estéticos */
+/* Errores estéticos: NUEVO margen negativo para pegarlos al input */
 .error-hint {
     color: #e74c3c;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     font-weight: bold;
     display: block;
-    margin: 5px 0 10px 5px;
+    margin: -10px 0 10px 5px;
+    text-align: left;
 }
 
-/* Filas de Cédula y Teléfono (Alineación perfecta) */
+/* Barra de fuerza corregida */
+#passBar {
+    height: 4px;
+    width: 0%;
+    transition: 0.3s;
+    margin-top: -15px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+}
+
 .row-custom {
     display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+    gap: 5px;
+    margin-bottom: 20px;
     width: 100%;
+}
+
+.row-custom .input-wrapper {
+    flex: 1;
+    margin-bottom: 0;
 }
 
 .prefix-tag {
@@ -852,12 +830,10 @@ footer {
 }
 
 .menu-toggle {
-    display: none; /* Oculto en PC */
+    display: none; 
 }
-/* ==========================================================================
-   4. RESPONSIVE DESIGN (Corrección definitiva)
-   ========================================================================== */
 
+/* RESPONSIVE DESIGN */
 @media (max-width: 850px) {
     .navbar { padding: 10px 20px; }
     
@@ -873,7 +849,6 @@ footer {
         z-index: 1001;
     }
 
-    /* AQUÍ EL CAMBIO: Ahora son blancas y visibles sobre el verde */
     .menu-toggle .bar {
         display: block;
         width: 100%;
@@ -884,18 +859,17 @@ footer {
 
     .nav-links {
         position: absolute;
-        top: -1000px; /* Escondido arriba */
+        top: -1000px; 
         left: 0;
         width: 100%;
         flex-direction: column;
-        background: #1b4332; /* Tu verde oscuro para que se vea igual que la nav */
+        background: #1b4332; 
         padding: 40px 0;
         transition: 0.5s ease-in-out;
         box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         z-index: 1000;
     }
 
-    /* Cuando presionas las 3 líneas, esto lo baja */
     .nav-links.active { 
         top: 80px; 
     }
@@ -906,7 +880,6 @@ footer {
         margin: 15px 0;
     }
 
-    /* Aseguramos que los links se vean blancos en el menú desplegable */
     .nav-links li a {
         color: white !important;
         display: block;
@@ -914,5 +887,123 @@ footer {
     }
 
     .about-flex, .grid-2 { flex-direction: column; text-align: center; }
+    .dash-grid { grid-template-columns: 1fr; }
 }
 
+
+/* --- ESTILO MAPA NACIONAL MEJORADO --- */
+.category-grid {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.category-card {
+    flex: 1;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.category-card i {
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.category-card span {
+    font-weight: bold;
+    font-size: 1.4rem;
+    color: #444;
+}
+
+/* Botón Activo (Rojo como la referencia) */
+.category-card.active {
+    background-color: #027e44;
+    border-color: #027e44;
+}
+
+.category-card.active i, .category-card.active span {
+    color: white;
+}
+
+/* Paneles de contenido */
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+/* Sub-pestañas Internas (Hierros / Señales) */
+.sub-tabs-container {
+    display: flex;
+    margin-bottom: 0;
+}
+
+.sub-tab {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #ddd;
+    background: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sub-tab.active {
+    background: #027e44;
+    color: white;
+    border-color: #027e44;
+}
+
+/* Flexbox para Info e Imagen */
+.info-content-flex {
+    display: none;
+    background: white;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-top: none;
+    gap: 30px;
+    align-items: center;
+}
+
+.info-content-flex.active {
+    display: flex;
+}
+
+.info-text-side {
+    flex: 1;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.info-image-side {
+    flex: 1;
+}
+
+.info-image-side img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsivo para el Mapa */
+@media (max-width: 768px) {
+    .category-grid { flex-direction: column; }
+    .info-content-flex { flex-direction: column; }
+}

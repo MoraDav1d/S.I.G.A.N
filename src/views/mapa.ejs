@@ -4,26 +4,81 @@
     <meta charset="UTF-8">
     <title>SIGAN | Mapa Nacional</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <%- include('partials/navbar') %>
 
     <div class="main-wrapper">
-        <div class="tabs-header">
-            <div class="tab-item">
-                <span>🐎</span> Hierros y Señales
+        <div class="category-grid">
+            <div class="category-card" id="btn-hierros" onclick="showTab('hierros')">
+                <i class="fa-solid fa-horse-head"></i>
+                <span>Hierros y Señales</span>
             </div>
-            <div class="tab-item active">
-                <span>📍</span> Números identificadores
+            <div class="category-card active" id="btn-numeros" onclick="showTab('numeros')">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>Números identificadores</span>
             </div>
         </div>
 
-        <div class="map-container-box">
-            <div class="image-area">
-                <img src="/img/mapa-Venezuela.jpg" alt="Mapa Identificadores de Venezuela">
+        <div id="content-hierros" class="tab-pane">
+            <div class="sub-tabs-container">
+                <button class="sub-tab active" onclick="switchSubTab('hierro')">Hierros</button>
+                <button class="sub-tab" onclick="switchSubTab('senal')">Señales</button>
+            </div>
+            
+            <div id="sub-hierro" class="info-content-flex active">
+                <div class="info-text-side">
+                    <p>El Hierro es un instrumento de metal que, ya sea usado con nitrógeno líquido o calentado al fuego, sirve para estampar sobre la piel de un animal una marca permanente.</p>
+                    <p><strong>Ganado Mayor:</strong> Bovinos, Bufalinos, Équidos (Equinos, Asnos, Mulas, Burdeganos).</p>
+                </div>
+                <div class="info-image-side">
+                    <img src="/img/proceso-hierro.jpg" alt="Proceso de Hierro">
+                </div>
+            </div>
+
+            <div id="sub-senal" class="info-content-flex">
+                <div class="info-text-side">
+                    <p>La señal es todo corte, muesca, tatuaje, tonsura, tinte, botón u otro signo semejante que se haga o aplique a un animal con propósito de distinguirlo.</p>
+                    <p><strong>Ganado Menor:</strong> Ovinos, Caprinos, Cunícolas, Porcinos.</p>
+                </div>
+                <div class="info-image-side">
+                    <img src="/img/proceso-senal.jpg" alt="Proceso de Señal">
+                </div>
+            </div>
+        </div>
+
+        <div id="content-numeros" class="tab-pane active">
+            <div class="map-container-box">
+                <div class="image-area">
+                    <img src="/img/mapa-nacional.jpg" alt="Mapa Identificadores de Venezuela">
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function showTab(tabName) {
+            // Resetear botones
+            document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+            // Resetear contenidos
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            
+            // Activar seleccionados
+            document.getElementById('btn-' + tabName).classList.add('active');
+            document.getElementById('content-' + tabName).classList.add('active');
+        }
+
+        function switchSubTab(type) {
+            // Cambiar botones internos
+            document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Cambiar contenido interno
+            document.querySelectorAll('.info-content-flex').forEach(i => i.classList.remove('active'));
+            document.getElementById('sub-' + type).classList.add('active');
+        }
+    </script>
 
     <%- include('partials/footer') %>
 </body>
