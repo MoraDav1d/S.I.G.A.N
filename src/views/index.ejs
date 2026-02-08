@@ -10,14 +10,42 @@
     <%- include('partials/navbar') %>
 
     <header class="hero">
-        <h1>Hacia la Transformación Digital del Campo Nacional</h1>
-        <p>Protegiendo la propiedad ganadera a través de la tecnología.</p>
-        <a href="/registro"><button>Registrar mi Finca</button></a>
+        <div class="hero-content">
+            <h1>Hacia la Transformación Digital del Campo Nacional</h1>
+            <p>Protegiendo la propiedad ganadera a través de la tecnología.</p>
+            <a href="/registro-finca" class="btn-main">Registrar mi Finca</a>
+        </div>
     </header>
 
-    <section class="info-section">
-        <h2>¿Qué es SIGAN?</h2>
-        <p>Es la plataforma Nacional para la trazabilidad y registro único de hierros, evitando duplicidad y garantizando seguridad jurídica a los productores.</p>
+    <section class="about-section">
+        <div class="container">
+            <div class="about-flex">
+                <div class="about-image">
+                    <img src="/img/seguridad-agro.jpg" alt="Innovación en el campo">
+                </div>
+                <div class="about-text">
+                    <span class="badge">SOBRE NOSOTROS</span>
+                    <h2>¿Qué es SIGAN?</h2>
+                    <p>Es la plataforma tecnológica de vanguardia diseñada para modernizar el control agropecuario del país. 
+                       Nuestra herramienta permite a los productores nacionales centralizar su información, 
+                       geolocalizar sus tierras y asegurar la propiedad de su ganado mediante un registro único de hierros, 
+                       eliminando la duplicidad y los conflictos de identificación a nivel estatal y nacional.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mission-vision-section">
+        <div class="container grid-2">
+            <div class="card">
+                <h3>Misión</h3>
+                <p>Proveer al sector agropecuario una infraestructura digital robusta que garantice la trazabilidad, seguridad jurídica y el ordenamiento de los productores nacionales mediante tecnología de geoposicionamiento y registro visual de marcas.</p>
+            </div>
+            <div class="card">
+                <h3>Visión</h3>
+                <p>Ser el estándar tecnológico nacional en gestión agropecuaria, reconocidos por erradicar las confusiones en el registro de hierros y potenciar la productividad mediante datos estadísticos precisos y en tiempo real.</p>
+            </div>
+        </div>
     </section>
 
     <%- include('partials/footer') %>

@@ -40,13 +40,60 @@ main {
     background: #1b4332;
     padding: 15px 50px;
     color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
+/*LOGO SIGAN*/
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1b4332; /* Fondo blanco */
+    padding: 10px 50px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1); /* Sombra para dar profundidad */
+    border-bottom: 4px solid var(--verde-medio); /* Línea verde decorativa */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Ajuste del Logo */
+.nav-logo {
+    height: 65px; /* Un poco más grande para que se lean las letras pequeñas */
+    width: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.nav-logo:hover {
+    transform: scale(1.03);
+}
+
+/* Links en Verde Oscuro para que contrasten con el blanco */
+.nav-links li a { 
+    text-decoration: none;
+    font-weight: 700; /* Letras gorditas como querías */
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* El efecto de sombrita verde clara al pasar el mouse */
+.nav-links li a:hover {
+    background-color: rgba(91, 219, 66, 0.315); /* Verde muy suave */
+}
+/* Ajuste opcional para el contenedor si necesitas centrarlo mejor */
+.logo-container {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
 .nav-links {
     list-style: none;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 25px;
 }
 
 .nav-links a {
@@ -71,7 +118,7 @@ main {
 .hero {
     height: 70vh;
     background: linear-gradient(rgba(27, 67, 50, 0.8), rgba(27, 67, 50, 0.8)), 
-                url('https://images.unsplash.com/photo-1544919982-b61976f0ba43?auto=format&fit=crop&w=1200&q=80');
+                url('/img/portada.jpg');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -235,7 +282,7 @@ footer {
 }
 
 .tab-item.active {
-    background-color: #b71c1c; /* Rojo institucional */
+    background-color: #027e44; /* Rojo institucional */
     color: white;
 }
 
@@ -488,4 +535,161 @@ footer {
     border-radius: 8px;
     text-decoration: none;
     font-weight: bold;
+}
+
+/*EL INICIO MEJORADO*/
+/* Estilos para el Hero */
+.hero-section {
+    background-image: url('/img/campo-venezolano.jpg'); /* Asegúrate de subir una foto con este nombre */
+    background-size: cover;
+    background-position: center;
+    height: 80vh;
+    position: relative;
+    color: white;
+}
+
+.hero-overlay {
+    background: rgba(0, 0, 0, 0.6); /* El filtro oscuro que pidió */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    padding: 20px;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.btn-main {
+    background-color: #027e44; /* Tu verde institucional */
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Estilos para las tarjetas de Misión y Visión */
+.grid-2 {
+    display: flex;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.card {
+    flex: 1;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-top: 5px solid #027e44;
+}
+
+.about-section {
+    padding: 80px 10%;
+    background-color: #ffffff;
+}
+
+.about-flex {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.about-text h2 {
+    color: #027e44; /* Tu verde institucional */
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.about-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #444;
+}
+
+.badge {
+    background-color: #e8f5e9;
+    color: #027e44;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 20px 20px 0px #027e44; /* Un detalle de diseño con tu color */
+}
+
+/* ==========================================================================
+   4. RESPONSIVE DESIGN (Corrección definitiva)
+   ========================================================================== */
+
+@media (max-width: 850px) {
+    .navbar { padding: 10px 20px; }
+    
+    .menu-toggle { 
+        display: flex; 
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 21px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        z-index: 1001;
+    }
+
+    /* AQUÍ EL CAMBIO: Ahora son blancas y visibles sobre el verde */
+    .menu-toggle .bar {
+        display: block;
+        width: 100%;
+        height: 3px;
+        background-color: white !important; 
+        transition: all 0.3s ease;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: -1000px; /* Escondido arriba */
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background: #1b4332; /* Tu verde oscuro para que se vea igual que la nav */
+        padding: 40px 0;
+        transition: 0.5s ease-in-out;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        z-index: 1000;
+    }
+
+    /* Cuando presionas las 3 líneas, esto lo baja */
+    .nav-links.active { 
+        top: 80px; 
+    }
+
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+        margin: 15px 0;
+    }
+
+    /* Aseguramos que los links se vean blancos en el menú desplegable */
+    .nav-links li a {
+        color: white !important;
+        display: block;
+        width: 100%;
+    }
+
+    .about-flex, .grid-2 { flex-direction: column; text-align: center; }
 }
