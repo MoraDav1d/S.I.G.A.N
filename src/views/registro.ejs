@@ -15,40 +15,57 @@
             <h2>Crear Cuenta</h2>
             <p class="subtitle">Regístrese en el Sistema Integral de Gestión Agropecuaria</p>
 
-            <form action="/auth/register" method="POST">
-                
+            <% if (locals.errores) { %>
+                <div style="background: #fee2e2; color: #b91c1c; padding: 10px; border-radius: 5px; margin-bottom: 20px; font-size: 0.85rem;">
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <% errores.forEach(error => { %>
+                            <li><%= error.msg %></li>
+                        <% }) %>
+                    </ul>
+                </div>
+            <% } %>
+
+            <form action="/auth/register" method="POST" id="registroForm">
                 <div class="form-row">
                     <div class="input-wrapper">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" name="nombre" placeholder="Nombre" required>
+                        <input type="text" name="nombre" placeholder="Nombre" value="<%= locals.datos ? datos.nombre : '' %>" required>
                     </div>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" name="apellido" placeholder="Apellido" required>
+                        <input type="text" name="apellido" placeholder="Apellido" value="<%= locals.datos ? datos.apellido : '' %>" required>
                     </div>
                 </div>
 
                 <div class="input-wrapper">
                     <i class="fa-solid fa-id-card"></i>
-                    <input type="text" name="cedula" placeholder="Cédula (V-00.000.000)" required>
+                    <input type="text" name="cedula" placeholder="Cédula (V-00.000.000)" value="<%= locals.datos ? datos.cedula : '' %>" required>
                 </div>
 
                 <div class="input-wrapper">
                     <i class="fa-solid fa-phone"></i>
-                    <input type="tel" name="telefono" placeholder="Teléfono" required>
+                    <input type="tel" name="telefono" placeholder="Teléfono" value="<%= locals.datos ? datos.telefono : '' %>" required>
                 </div>
 
                 <div class="input-wrapper">
                     <i class="fa-solid fa-envelope"></i>
-                    <input type="email" name="correo" placeholder="Correo Electrónico" required>
+                    <input type="email" name="correo" id="emailInput" placeholder="Correo Electrónico" value="<%= locals.datos ? datos.correo : '' %>" required>
+                    <small id="emailFeedback" style="display:block; margin-top:5px; font-weight: bold;"></small>
                 </div>
+
+                <div class="input-wrapper" style="margin-bottom: 5px;">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" name="password" id="passwordInput" placeholder="Cree una contraseña" required>
+                </div>
+                <div id="passwordStrength" style="height: 4px; width: 0%; transition: all 0.3s; margin-bottom: 5px; border-radius: 2px;"></div>
+                <small id="passwordFeedback" style="display:block; margin-bottom: 15px; font-size: 0.8rem;"></small>
 
                 <div class="input-wrapper">
-                    <i class="fa-solid fa-lock"></i>
-                    <input type="password" name="password" placeholder="Cree una contraseña" required>
+                    <i class="fa-solid fa-check-double"></i>
+                    <input type="password" name="confirmPassword" id="confirmPasswordInput" placeholder="Confirme su contraseña" required>
                 </div>
 
-                <button type="submit" class="btn-entrar">Crear Mi Cuenta</button>
+                <button type="submit" class="btn-entrar" id="submitBtn">Crear Mi Cuenta</button>
             </form>
 
             <p class="footer-text">
@@ -56,6 +73,59 @@
             </p>
         </div>
     </div>
+
+    <script>
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const passwordFeedback = document.getElementById('passwordFeedback');
+        const emailInput = document.getElementById('emailInput');
+        const emailFeedback = document.getElementById('emailFeedback');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // 1. Validación de Contraseña en tiempo real
+        passwordInput.addEventListener('input', () => {
+            const val = passwordInput.value;
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (/[A-Z]/.test(val)) score++;
+            if (/\d/.test(val)) score++;
+
+            const colors = ['#ff4d4d', '#ffa500', '#2ecc71'];
+            const messages = ['Débil (mínimo 8 caracteres)', 'Media (falta mayúscula o número)', '¡Contraseña Segura!'];
+
+            if (val.length === 0) {
+                passwordStrength.style.width = '0%';
+                passwordFeedback.textContent = '';
+            } else {
+                passwordStrength.style.width = (score + 1) * 33.3 + '%';
+                passwordStrength.style.backgroundColor = colors[score] || colors[0];
+                passwordFeedback.textContent = messages[score] || messages[0];
+                passwordFeedback.style.color = colors[score] || colors[0];
+            }
+        });
+
+        // 2. Verificación de Correo (AJAX)
+        emailInput.addEventListener('blur', async () => {
+            const email = emailInput.value;
+            if (email.includes('@')) {
+                try {
+                    const response = await fetch(`/auth/check-email?email=${email}`);
+                    const data = await response.json();
+                    if (data.exists) {
+                        emailFeedback.textContent = '❌ Este correo ya está registrado';
+                        emailFeedback.style.color = '#ff4d4d';
+                        submitBtn.disabled = true;
+                        submitBtn.style.opacity = '0.5';
+                    } else {
+                        emailFeedback.textContent = '✅ Correo disponible';
+                        emailFeedback.style.color = '#2ecc71';
+                        submitBtn.disabled = false;
+                        submitBtn.style.opacity = '1';
+                    }
+                } catch (err) { console.error(err); }
+            }
+        });
+    </script>
 
     <%- include('partials/footer') %>
 </body>

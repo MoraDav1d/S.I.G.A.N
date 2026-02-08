@@ -1,14 +1,12 @@
 <nav class="navbar">
-    <a href="/" class="logo-container">
-        <img src="/img/logo-sigan.png" alt="SIGAN Logo" class="nav-logo">
-    </a>
+    <a href="/" class="logo-container"><img src="/img/logo-sigan.png" alt="SIGAN Logo" class="nav-logo"></a>
 
     <button class="menu-toggle" id="mobile-menu">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
     </button>
-
+    
     <ul class="nav-links" id="nav-list">
         <li><a href="/">Inicio</a></li>
         <li><a href="/mapa-nacional">Mapa Nacional</a></li>
@@ -27,14 +25,14 @@
     </ul>
 
     <script>
-    const menu = document.querySelector('#mobile-menu');
-    const menuLinks = document.querySelector('#nav-list');
+        const menu = document.querySelector('#mobile-menu');
+        const menuLinks = document.querySelector('#nav-list');
 
-    if (menu) { // Añadimos esta seguridad por si el menú no existe en alguna página
-        menu.addEventListener('click', () => {
-            menu.classList.toggle('is-active');
-            menuLinks.classList.toggle('active');
-        });
-    }
-</script>
+        if (menu && menuLinks) {
+            menu.addEventListener('click', () => {
+                menu.classList.toggle('is-active');
+                menuLinks.classList.toggle('active');
+            });
+        }
+    </script>
 </nav>
