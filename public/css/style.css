@@ -974,7 +974,7 @@ input:-webkit-autofill:focus {
     border: 1px solid #ddd;
     border-top: none;
     gap: 30px;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .info-content-flex.active {
@@ -997,9 +997,60 @@ input:-webkit-autofill:focus {
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
+/* Justificar el cuerpo del texto */
+.info-text-side p {
+    text-align: justify;
+    margin-bottom: 20px; /* Espacio general entre párrafos */
+}
+
+/* Separar específicamente la sección de Ganado Mayor/Menor */
+.info-text-side strong + br + strong, 
+.info-text-side p:last-child {
+    display: block;
+    margin-top: 30px; /* Aquí controlas qué tan abajo quieres el texto de Ganado Mayor */
+}
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- AJUSTES DE TAMAÑO SOLICITADOS --- */
+
+/* 1. Sub-pestañas Internas (Hierros / Señales) - Letras más grandes */
+.sub-tab {
+    flex: 1;
+    padding: 15px; /* Aumenté el padding para que el botón sea más robusto */
+    border: 1px solid #ddd;
+    background: white;
+    font-weight: 700; /* Más negrita */
+    font-size: 1.0rem; /* Aumentado de 1.1rem a 1.5rem */
+    text-transform: uppercase; /* Opcional: para que se vea más institucional */
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+}
+
+/* 2. Texto informativo dentro del panel (El contenido) */
+.info-text-side {
+    flex: 1;
+    font-size: 1.2rem; /* Aumentado de 1.1rem a 1.3rem */
+    line-height: 1.8; /* Más espacio entre líneas para mejor lectura */
+    color: #333;
+}
+
+/* 3. Títulos internos (como "Ganado Mayor" o "Ganado Menor") */
+.info-text-side b, 
+.info-text-side strong {
+    font-size: 1.4rem; /* Un poco más grande que el texto base */
+    color: #07140f; /* Color verde oscuro institucional */
+}
+
+/* 4. Ajuste adicional para los íconos de las categorías superiores por si acaso */
+.category-card span {
+    font-weight: bold;
+    font-size: 1.4rem; /* Subí un poco de 1.4rem a 1.6rem */
+    color: #444;
 }
 
 /* Responsivo para el Mapa */
