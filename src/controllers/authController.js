@@ -131,20 +131,25 @@ exports.eliminarAnimal = (req, res) => {
 
 exports.actualizarGanado = (req, res) => {
     const id_animal = req.params.id;
-    const { nombre_animal, raza, sexo, peso_inicial, proposito } = req.body;
+    const { codigo_arete, nombre_animal, raza, sexo, fecha_nacimiento, peso_inicial, proposito, codigo_estado } = req.body;
     const id_productor = req.session.userId;
 
     const sql = `UPDATE ganado SET 
-                 nombre_animal = ?, raza = ?, sexo = ?, peso_inicial = ?, proposito = ?
+                 codigo_arete = ?, nombre_animal = ?, raza = ?, sexo = ?, 
+                 fecha_nacimiento = ?, peso_inicial = ?, proposito = ?, codigo_estado = ?
                  WHERE id_animal = ? 
                  AND id_finca = (SELECT id_finca FROM fincas WHERE id_productor = ?)`;
 
-    const params = [nombre_animal, raza, sexo, peso_inicial, proposito, id_animal, id_productor];
+    const params = [
+        codigo_arete, nombre_animal, raza, sexo, 
+        fecha_nacimiento, peso_inicial, proposito, codigo_estado,
+        id_animal, id_productor
+    ];
 
     db.run(sql, params, function(err) {
         if (err) {
             console.error(err.message);
-            return res.send("Error al actualizar el animal.");
+            return res.send("Error al actualizar el animal. Verifique que el arete no esté duplicado.");
         }
         res.redirect('/dashboard?success=actualizado');
     });

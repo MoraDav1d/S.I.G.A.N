@@ -104,7 +104,17 @@ app.get('/editar-ganado/:id', isAuthenticated, (req, res) => {
 app.get('/reporte-sigan', isAuthenticated, (req, res) => {
     const PDFDocument = require('pdfkit');
     const db = require('./src/models/db');
+    const path = require('path');
     
+    // Diccionario de estados para mostrar nombres reales
+    const estadosVzla = {
+        "1": "Anzoátegui", "2": "Apure", "3": "Aragua", "4": "Barinas", "5": "Bolívar",
+        "6": "Carabobo", "7": "Cojedes", "8": "Falcón", "9": "Guárico", "10": "Lara",
+        "11": "Mérida", "12": "Miranda", "13": "Monagas", "14": "Nueva Esparta", "15": "Portuguesa",
+        "16": "Sucre", "17": "Táchira", "18": "Trujillo", "19": "Yaracuy", "20": "Zulia",
+        "21": "Distrito Capital", "22": "Amazonas", "23": "Delta Amacuro", "24": "La Guaira"
+    };
+
     const sql = `
         SELECT f.*, g.* FROM fincas f 
         LEFT JOIN ganado g ON f.id_finca = g.id_finca 
@@ -117,48 +127,117 @@ app.get('/reporte-sigan', isAuthenticated, (req, res) => {
         }
 
         const finca = rows[0];
-        const doc = new PDFDocument({ margin: 50 });
+        const doc = new PDFDocument({ margin: 50, size: 'A4' });
 
-        // CONFIGURACIÓN DE CABECERAS (Headers) [cite: 1, 3]
-        res.setHeader('Content-Type', 'application/pdf'); // [cite: 1]
-        const nombreArchivo = `Reporte_SIGAN_${finca.nombre_finca.replace(/\s+/g, '_')}.pdf`; // 
-        res.setHeader('Content-Disposition', `inline; filename=${nombreArchivo}`); // 
+        res.setHeader('Content-Type', 'application/pdf');
+        const nombreArchivo = `Reporte_SIGAN_${finca.nombre_finca.replace(/\s+/g, '_')}.pdf`;
+        res.setHeader('Content-Disposition', `inline; filename=${nombreArchivo}`);
 
         doc.pipe(res);
 
-        // --- DISEÑO DEL PDF ---
-        doc.fillColor('#2d6a4f').fontSize(25).text('SISTEMA SIGAN', { align: 'center' }); // [cite: 1, 2]
-        doc.fontSize(12).text('Reporte Oficial de Inventario Ganadero', { align: 'center' }); // [cite: 1, 2]
-        doc.moveDown();
-        doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
-        doc.moveDown();
-
-        // Datos de la Finca [cite: 3, 4]
-        doc.fillColor('black').fontSize(14).text(`Unidad de Producción: ${finca.nombre_finca}`); // 
-        doc.fontSize(10).text(`Propietario: ${finca.nombre_prop} ${finca.apellido_prop}`); // [cite: 4]
-        doc.text(`Ubicación: ${finca.municipio}, Edo. ${finca.estado}`); // [cite: 4]
-        doc.text(`Total Animales: ${rows[0].id_animal ? rows.length : 0}`); // [cite: 4]
-        doc.moveDown();
-        doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
-        doc.moveDown();
-
-        // Tabla de Animales [cite: 5, 6]
-        doc.fontSize(14).fillColor('#2d6a4f').text('Inventario Detallado', { underline: true }); // [cite: 5]
-        doc.moveDown();
-
-        if (rows[0].id_animal) {
-            rows.forEach((animal, i) => {
-                doc.fillColor('black').fontSize(10)
-                   .text(`${i + 1}. Arete: ${animal.codigo_arete} | Nombre: ${animal.nombre_animal || 'N/A'} | Raza: ${animal.raza} | Uso: ${animal.proposito}`); // [cite: 6, 8]
-                doc.text(`   Sexo: ${animal.sexo} | Peso: ${animal.peso_inicial} Kg | F. Nacimiento: ${animal.fecha_nacimiento}`, { indent: 20 }); // [cite: 7, 9]
-                doc.moveDown(0.5);
-            });
-        } else {
-            doc.text('No se encontraron animales registrados.');
+        // --- ENCABEZADO PRO ---
+        // Logo a la izquierda
+        const logoPath = path.join(__dirname, 'public/img/logo-sigan.png');
+        try {
+            doc.image(logoPath, 50, 45, { width: 80 });
+        } catch (e) {
+            console.log("Logo no encontrado, continuando sin imagen.");
         }
 
-        // Pie de página [cite: 10]
-        doc.fontSize(8).fillColor('grey').text(`Documento generado el: ${new Date().toLocaleString()}`, 50, 700, { align: 'center' }); // [cite: 10]
+        // Títulos a la derecha
+        doc.fillColor('#1b4332')
+           .fontSize(20)
+           .text('SISTEMA SIGAN', 150, 50, { align: 'right' });
+        doc.fontSize(10)
+           .fillColor('#2d6a4f')
+           .text('Gestión Integral de Ganadería Nacional', { align: 'right' });
+        doc.fillColor('#444')
+           .text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, { align: 'right' });
+
+        // Línea divisoria elegante
+        doc.moveTo(50, 110).lineTo(550, 110).lineWidth(2).strokeColor('#2d6a4f').stroke();
+
+        doc.moveDown(4);
+
+        // --- INFORMACIÓN DE LA UNIDAD DE PRODUCCIÓN ---
+        doc.rect(50, 130, 500, 20).fill('#f2f2f2'); // Fondo gris claro para el subtítulo
+        doc.fillColor('#1b4332').fontSize(12).text('DATOS DE LA UNIDAD DE PRODUCCIÓN', 60, 135);
+        
+        doc.moveDown(1);
+        doc.fillColor('black').fontSize(11);
+        
+        const col1 = 60;
+        const col2 = 300;
+        let yPos = doc.y;
+
+        doc.text(`Finca: ${finca.nombre_finca}`, col1, yPos);
+        doc.text(`Propietario: ${finca.nombre_prop} ${finca.apellido_prop}`, col2, yPos);
+        
+        yPos += 20;
+        const nombreEstado = estadosVzla[finca.estado] || finca.estado;
+        doc.text(`Ubicación: Municipio ${finca.municipio}, Edo. ${nombreEstado}`, col1, yPos);
+        doc.text(`Capacidad Total: ${rows[0].id_animal ? rows.length : 0} Animales`, col2, yPos);
+
+        doc.moveDown(3);
+
+        // --- TABLA DE INVENTARIO (DISEÑO PRO) ---
+        const tableTop = doc.y;
+            const itemHeight = 35; // Aumentamos un poco el alto para que quepa la segunda línea
+
+            // Cabecera de la tabla
+            doc.rect(50, tableTop, 500, 25).fill('#1b4332');
+            doc.fillColor('white').fontSize(10);
+            doc.text('ID/Arete', 60, tableTop + 8);
+            doc.text('Nombre / Propósito', 130, tableTop + 8);
+            doc.text('Raza', 260, tableTop + 8);
+            doc.text('Sexo', 350, tableTop + 8);
+            doc.text('Origen / F. Nac', 440, tableTop + 8);
+
+            // Filas de animales
+            doc.fillColor('black');
+            let currentY = tableTop + 25;
+
+            if (rows[0].id_animal) {
+                rows.forEach((animal, index) => {
+                    // Fondo cebra
+                    if (index % 2 !== 0) {
+                        doc.rect(50, currentY, 500, itemHeight).fill('#f9f9f9');
+                    }
+
+                    doc.fillColor('black').fontSize(10);
+                    const edoAnimal = estadosVzla[animal.codigo_estado] || "---";
+                    
+                    // Primera Línea (Datos principales)
+                    doc.font('Helvetica-Bold').text(animal.codigo_arete, 60, currentY + 7);
+                    doc.font('Helvetica').text(animal.nombre_animal || 'N/A', 130, currentY + 7);
+                    doc.text(animal.raza, 260, currentY + 7);
+                    doc.text(animal.sexo, 350, currentY + 7);
+                    doc.text(edoAnimal, 440, currentY + 7);
+
+                    // Segunda Línea (Detalles técnicos en gris y letra más pequeña)
+                    doc.fillColor('#666').fontSize(8);
+                    doc.text(`Uso: ${animal.proposito || 'No definido'}`, 130, currentY + 20);
+                    doc.text(`Nacido el: ${animal.fecha_nacimiento || 'S/D'}`, 440, currentY + 20);
+
+                    // Línea divisoria
+                    doc.moveTo(50, currentY + itemHeight).lineTo(550, currentY + itemHeight).lineWidth(0.5).strokeColor('#ddd').stroke();
+                    
+                    currentY += itemHeight;
+
+                    // Control de salto de página
+                    if (currentY > 730) { 
+                        doc.addPage();
+                        currentY = 50; 
+                    }
+                });
+    } else {
+            doc.text('No se encontraron ejemplares registrados en esta finca.', 60, currentY + 15);
+        }
+
+        // --- PIE DE PÁGINA ---
+        doc.fontSize(8).fillColor('grey')
+           .text('Este reporte es generado por el Sistema Integral de Gestión Agropecuaria Nacional (SIGAN).', 50, 780, { align: 'center' });
+        doc.text('La veracidad de los datos depende del registro realizado por el productor.', { align: 'center' });
 
         doc.end();
     });
