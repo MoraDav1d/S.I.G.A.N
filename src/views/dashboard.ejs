@@ -53,6 +53,10 @@
                     <a href="/registrar-ganado" class="btn-dash" style="text-decoration: none; display: block; width: 100%;">
                         <i class="fa-solid fa-plus"></i> Registrar Ganado
                     </a>
+
+                    <a href="/estadisticas" class="btn-dash" style="text-decoration: none; display: flex; align-items: center; justify-content: center; background-color: #40916c;">
+                        <i class="fa-solid fa-chart-line"></i> Estadísticas Finca
+                    </a>
                    
                     <a href="/reporte-sigan" target="_blank" class="btn-dash" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
                         <i class="fa-solid fa-file-pdf"></i> Reporte SIGAN
@@ -102,7 +106,7 @@
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
 
-                                    <form action="/auth/eliminar-animal/<%= animal.id_animal %>" method="POST" onsubmit="return confirm('...');">
+                                    <form action="/auth/eliminar-animal/<%= animal.id_animal %>" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este registro?');">
                                         <button type="submit" style="background: #e63946; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>

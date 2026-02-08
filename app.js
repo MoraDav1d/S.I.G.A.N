@@ -63,6 +63,40 @@ app.get('/dashboard', isAuthenticated, (req, res) => {
     });
 });
 
+// --- NUEVA RUTA DE ESTADÍSTICAS ---
+app.get('/estadisticas', isAuthenticated, (req, res) => {
+    const db = require('./src/models/db');
+    
+    // Consulta 1: Datos de la finca y conteos
+    const sqlData = `
+        SELECT 
+            (SELECT COUNT(*) FROM ganado g JOIN fincas f ON g.id_finca = f.id_finca WHERE f.id_productor = ?) as misAnimales,
+            (SELECT COUNT(*) FROM ganado g JOIN fincas f ON g.id_finca = f.id_finca 
+             WHERE f.estado = (SELECT estado FROM fincas WHERE id_productor = ?)) as totalEstado,
+            f.estado, f.nombre_finca
+        FROM fincas f WHERE f.id_productor = ?`;
+
+    db.get(sqlData, [req.session.userId, req.session.userId, req.session.userId], (err, infoGeneral) => {
+        if (err || !infoGeneral) return res.redirect('/dashboard');
+
+        // Consulta 2: Agrupar por Sexo
+        const sqlSexo = `SELECT sexo, COUNT(*) as cantidad FROM ganado WHERE id_finca = (SELECT id_finca FROM fincas WHERE id_productor = ?) GROUP BY sexo`;
+        
+        // Consulta 3: Agrupar por Raza
+        const sqlRaza = `SELECT raza, COUNT(*) as cantidad FROM ganado WHERE id_finca = (SELECT id_finca FROM fincas WHERE id_productor = ?) GROUP BY raza`;
+
+        db.all(sqlSexo, [req.session.userId], (err, statsSexo) => {
+            db.all(sqlRaza, [req.session.userId], (err, statsRaza) => {
+                res.render('estadisticas', {
+                    info: infoGeneral,
+                    statsSexo: statsSexo,
+                    statsRaza: statsRaza
+                });
+            });
+        });
+    });
+});
+
 app.get('/editar-ganado/:id', isAuthenticated, (req, res) => {
     const db = require('./src/models/db');
     const sql = `SELECT * FROM ganado WHERE id_animal = ? AND id_finca = (SELECT id_finca FROM fincas WHERE id_productor = ?)`;
@@ -72,7 +106,7 @@ app.get('/editar-ganado/:id', isAuthenticated, (req, res) => {
     });
 });
 
-// REPORTE PDF PRO (Sincronizado)
+// REPORTE PDF PRO
 app.get('/reporte-sigan', isAuthenticated, (req, res) => {
     const PDFDocument = require('pdfkit');
     const db = require('./src/models/db');
@@ -97,7 +131,6 @@ app.get('/reporte-sigan', isAuthenticated, (req, res) => {
         res.setHeader('Content-Disposition', `inline; filename=Reporte_SIGAN.pdf`);
         doc.pipe(res);
 
-        // Encabezado Pro
         const logoPath = path.join(__dirname, 'public/img/logo-sigan.png');
         try { doc.image(logoPath, 50, 45, { width: 80 }); } catch (e) {}
 
@@ -112,7 +145,6 @@ app.get('/reporte-sigan', isAuthenticated, (req, res) => {
         doc.fillColor('black').fontSize(11).text(`Finca: ${finca.nombre_finca}`, 60, 160);
         doc.text(`Propietario: ${finca.nombre_prop} ${finca.apellido_prop}`, 300, 160);
 
-        // Tabla
         const tableTop = 220;
         doc.rect(50, tableTop, 500, 25).fill('#1b4332');
         doc.fillColor('white').fontSize(10).text('Arete', 60, tableTop + 8);
